@@ -26,3 +26,27 @@ func Find(a []string, x string) int {
 	}
 	return -1
 }
+
+func Substr(str string, start int, end int) string {
+	rs := []rune(str)
+	length := len(rs)
+
+	if start < 0 || start > length {
+		return ""
+	}
+
+	if end < 0 || end > length {
+		return ""
+	}
+	return string(rs[start:end])
+}
+
+// IsStrInList 判断字符串e是否在字符串数组l中
+func IsStrInList(e string, l []string) bool {
+	for _, v := range l {
+		if e == v {
+			return true
+		}
+	}
+	return false
+}

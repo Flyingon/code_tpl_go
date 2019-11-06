@@ -26,3 +26,17 @@ func JSONUnMarshal(jsonStream []byte, ret interface{}) error {
 	}
 	return nil
 }
+
+// ValueToStr JSONUnMarshal到map[string]interface{}后interface{} to string
+func ValueToStr(v interface{}) (ret string) {
+	switch v.(type) {
+	case string:
+		ret = v.(string)
+	case json.Number:
+		ret = v.(json.Number).String()
+	default:
+		val, _ := JSONMarshal(v)
+		ret = BytesToStringFast(val)
+	}
+	return
+}
