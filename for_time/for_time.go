@@ -37,20 +37,20 @@ func GetTsBegin(ts int64) int64 {
 	return t.Unix()
 }
 
-// 获取time当天时间零点时间戳
-func GetTimeBeginTs(t time.Time) int64 {
+// 获取time当天时间零点
+func GetTimeBegin(t time.Time) time.Time {
 	startTime := time.Date(t.Year(), t.Month(), t.Day(), 0, 0, 0, 0, t.Location())
-	return startTime.Unix()
+	return startTime
 }
 
-// 获取ts当天时间零点时间戳
-func GetTimeEndTs(t time.Time) int64 {
+// 获取ts当天时间23:59:59
+func GetTimeEnd(t time.Time) time.Time {
 	endTime := time.Date(t.Year(), t.Month(), t.Day(), 23, 59, 59, 0, t.Location())
-	return endTime.Unix()
+	return endTime
 }
 
 // GetBeforeTs 获取n天前的时间戳
-func GetBeforeTs(timeStr string) (tsStart, tsEnd int64, err error) {
+func GetBeforeTs(timeStr string) (tsStart, tsEnd time.Time, err error) {
 	nowTime := time.Now()
 	numStr := timeStr[:len(timeStr)-1]
 	num, err := strconv.Atoi(numStr)
@@ -69,11 +69,10 @@ func GetBeforeTs(timeStr string) (tsStart, tsEnd int64, err error) {
 	default:
 		err = fmt.Errorf("unspport time format: %s", timeStr)
 	}
-	tsStart = GetTimeBeginTs(getTime)
-	tsEnd = GetTimeEndTs(nowTime)
+	tsStart = GetTimeBegin(getTime)
+	tsEnd = GetTimeEnd(nowTime)
 	return
 }
-
 
 func main() {
 	fmt.Println("today begin: ", GetTodayBegin())
