@@ -1,6 +1,7 @@
 package main
 
 import (
+	"strconv"
 	"time"
 	"fmt"
 )
@@ -36,8 +37,47 @@ func GetTsBegin(ts int64) int64 {
 	return t.Unix()
 }
 
+// 获取time当天时间零点时间戳
+func GetTimeBeginTs(t time.Time) int64 {
+	startTime := time.Date(t.Year(), t.Month(), t.Day(), 0, 0, 0, 0, t.Location())
+	return startTime.Unix()
+}
+
+// 获取ts当天时间零点时间戳
+func GetTimeEndTs(t time.Time) int64 {
+	endTime := time.Date(t.Year(), t.Month(), t.Day(), 23, 59, 59, 0, t.Location())
+	return endTime.Unix()
+}
+
+// GetBeforeTs 获取n天前的时间戳
+func GetBeforeTs(timeStr string) (tsStart, tsEnd int64, err error) {
+	nowTime := time.Now()
+	numStr := timeStr[:len(timeStr)-1]
+	num, err := strconv.Atoi(numStr)
+	if err != nil {
+		return
+	}
+	unit := timeStr[len(timeStr)-1:]
+	getTime := nowTime
+	switch unit {
+	case "y":
+		getTime = nowTime.AddDate(-num, 0, 0)
+	case "m":
+		getTime = nowTime.AddDate(0, -num, 0)
+	case "d":
+		getTime = nowTime.AddDate(0, 0, -num)
+	default:
+		err = fmt.Errorf("unspport time format: %s", timeStr)
+	}
+	tsStart = GetTimeBeginTs(getTime)
+	tsEnd = GetTimeEndTs(nowTime)
+	return
+}
+
+
 func main() {
 	fmt.Println("today begin: ", GetTodayBegin())
 	fmt.Println("ts time: ", GetTimeFormat(1558430118))
 	fmt.Println("ts begin: ", GetTsBegin(1558430118))
+	fmt.Println(GetBeforeTs("0d"))
 }
