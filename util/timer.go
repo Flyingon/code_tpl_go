@@ -1,6 +1,8 @@
 package util
 
-import "time"
+import (
+	"time"
+	)
 
 // 按月定时
 func StartMonthlyTimer(f func()) {
@@ -36,5 +38,17 @@ func StartMinuteTimer(intMin uint, f func(interface{}), i interface{}) {
 			<-t.C
 		}
 	}()
+}
 
+// 按秒定时
+// 每次不重新生成timer
+func StartSecondTimer(intSec uint, f func(interface{}), i interface{}) {
+	go func() {
+		t := time.NewTimer(time.Duration(intSec) * time.Second)
+		for {
+			f(i)
+			<-t.C
+			t.Reset(time.Duration(intSec) * time.Second)
+		}
+	}()
 }
