@@ -50,3 +50,19 @@ func IsStrInList(e string, l []string) bool {
 	}
 	return false
 }
+
+// Setw 用c补充s长度到l, 类似C++: std::setw(16) << std::setfill('0')
+func Setw(l uint, s, c string) (r string) {
+	if len(c) > 1 {
+		return s
+	}
+	var num uint
+	if uint(len(s)) < l {
+		num = l - uint(len(s))
+	}
+	for i := uint(0); i < num; i ++ {
+		r += c
+	}
+	r += s
+	return r
+}
