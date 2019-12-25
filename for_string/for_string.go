@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"strings"
-)
+	)
 
 func CamelName(name string) string {
 	name = strings.Replace(name, "_", " ", -1)
