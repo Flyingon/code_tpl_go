@@ -14,16 +14,9 @@ var wgList sync.WaitGroup = sync.WaitGroup{}
 var muList sync.Mutex = sync.Mutex{}
 
 /*
-返回结果: 不加锁损失比较大，且随机损失
+返回结果:
 list add num=10000
-list len=7553, time=2 ms
-new list add num=10000
-new list len=10000, time=1 ms
-
-list add num=10000
-list len=9230, time=2 ms
-new list add num=10000
-new list len=10000, time=5 ms
+list len=10000, time=2 ms
 */
 func main() {
 	// 并发启动的协程数量
