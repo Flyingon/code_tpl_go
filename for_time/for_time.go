@@ -79,4 +79,15 @@ func main() {
 	fmt.Println("ts time: ", GetTimeFormat(1558430118))
 	fmt.Println("ts begin: ", GetTsBegin(1558430118))
 	fmt.Println(GetBeforeTs("0d"))
+
+	timeStamp := 1578041406
+	timeNow := time.Now()
+	timeTs := time.Unix(int64(timeStamp), 0)
+	timeSub := timeNow.Sub(timeTs)
+	timeSubSec := timeSub.Seconds()
+	fmt.Println(timeSubSec)
+
+
+
+	fmt.Println(costTime)
 }

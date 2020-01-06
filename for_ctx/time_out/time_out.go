@@ -12,8 +12,10 @@ func run(ctx context.Context){
 		select {
 		case <-ctx.Done():
 			fmt.Println("timeout")
+			return
 		default:
-			go JustPrint()
+			// 注意: 这里不能有阻塞操作，io或者sleep，否则还是等待相应之间，这样写只能控制每次循环前判断是否超时
+			JustPrint()
 			//fmt.Println(ctx.Value(key))
 		}
 	}
@@ -35,15 +37,18 @@ func run2(ctx context.Context) () {
 }
 
 func JustPrint() {
-	i := 0
-	for {
-		//if i >= 3 {
-		//	break
-		//}
-		fmt.Println(time.Now())
-		//time.Sleep(1*time.Second)
-		i ++
-	}
+	fmt.Println(time.Now())
+	//time.Sleep(5*time.Second)
+	//fmt.Println("end:" , time.Now())
+	//i := 0
+	//for {
+	//	if i >= 3 {
+	//		break
+	//	}
+	//	fmt.Println(time.Now())
+	//	time.Sleep(1*time.Second)
+	//	i ++
+	//}
 }
 
 func main() {
