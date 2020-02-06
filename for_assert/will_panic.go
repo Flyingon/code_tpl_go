@@ -20,7 +20,13 @@ func WillPanic() {
 	fmt.Printf("dataMap.nil: %s", d)
 }
 
+func WillPanic2() {
+	d := dataMap["nil"].(string)
+	fmt.Printf("dataMap.nil: %s", d)
+}
+
 func main() {
 	WillNotPanic()
+	WillPanic2()
 	WillPanic()
 }
