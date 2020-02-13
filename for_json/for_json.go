@@ -16,6 +16,11 @@ type LowClassifierOne struct {
 	Type       *int     `json:"type"`
 }
 
+type ABC struct {
+	A string `json:"a,omitempty"`
+	B string `json:"b"`
+}
+
 func main() {
 	//contentStr := `{"a": 1, "b": "2", "c": {"d": 3, "e": "4"}}`
 	//contentMap := make(map[string]interface{})
@@ -29,4 +34,11 @@ func main() {
 	lowClassifierDetail := LowClassifierDetail{}
 	err := json.Unmarshal([]byte(data), &lowClassifierDetail)
 	fmt.Println(err)
+
+	abcJson := `{"a":"", "b":""}`
+	abc := ABC{}
+	errABC := json.Unmarshal([]byte(abcJson), &abc)
+	fmt.Printf("err: %v, abc: %+v\n", errABC, abc)
+	abcJsonNew, _ := json.Marshal(&abc)
+	fmt.Printf("abc new json: %s\n", abcJsonNew)
 }

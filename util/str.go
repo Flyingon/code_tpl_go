@@ -2,6 +2,7 @@ package util
 
 import (
 	"reflect"
+	"unicode/utf8"
 	"unsafe"
 )
 
@@ -60,9 +61,20 @@ func Setw(l uint, s, c string) (r string) {
 	if uint(len(s)) < l {
 		num = l - uint(len(s))
 	}
-	for i := uint(0); i < num; i ++ {
+	for i := uint(0); i < num; i++ {
 		r += c
 	}
 	r += s
 	return r
+}
+
+// SubStrDecodeRuneInString 基于UTF8编码截取字段
+func SubStrDecodeRuneInString(s string, length int) string {
+	var size, n int
+	for i := 0; i < length && n < len(s); i++ {
+		_, size = utf8.DecodeRuneInString(s[n:])
+		n += size
+	}
+
+	return s[:n]
 }
