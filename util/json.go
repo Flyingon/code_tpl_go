@@ -36,7 +36,7 @@ func ValueToStr(v interface{}) (ret string) {
 		ret = v.(json.Number).String()
 	default:
 		val, _ := JSONMarshal(v)
-		ret = BytesToStringFast(val)
+		ret = string(val)
 	}
 	return
 }

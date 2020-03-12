@@ -195,11 +195,11 @@ func testFunc() {
 
 
 func main() {
-	testFunc()
-	//expression, err := govaluate.NewEvaluableExpression("foo > 0")
-	//parameters := make(map[string]interface{}, 8)
-	//parameters["foo"] = json.Number(1)
-	//
-	//result, err := expression.Evaluate(parameters);
-	//fmt.Println(result, err)
+	//testFunc()
+	expression, err := govaluate.NewEvaluableExpression("foo == ''")
+	parameters := make(map[string]interface{}, 8)
+	parameters["foo"] = ""
+
+	result, err := expression.Evaluate(parameters)
+	fmt.Println(result, err)
 }

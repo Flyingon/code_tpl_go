@@ -21,3 +21,11 @@ func MapCopy(originalMap map[string]interface{}) map[string]interface{} {
 	}
 	return newMap
 }
+
+func MapCopyString(originalMap map[string]string) map[string]string {
+	newMap := make(map[string]string)
+	for key, value := range originalMap {
+		newMap[key] = value
+	}
+	return newMap
+}

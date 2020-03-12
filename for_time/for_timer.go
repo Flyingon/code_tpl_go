@@ -1,6 +1,6 @@
 package main
 
-import(
+import (
 	"../util"
 	"fmt"
 	"time"
@@ -12,7 +12,12 @@ func PrintTime(argc interface{}) {
 	return
 }
 
+
+
 func main() {
-	util.StartSecondTimer(2, PrintTime, nil)
-	<-time.After(60 * time.Second)
+	//util.StartSecondTimer(2, PrintTime, nil)
+	//<-time.After(60 * time.Second)
+	for i:=0; i < 100; i ++ {
+		fmt.Println(util.GetRandomMilliSecDuration())
+	}
 }
