@@ -1,6 +1,7 @@
 package util
 
 import (
+	"encoding/json"
 	"fmt"
 	"strconv"
 )
@@ -56,6 +57,11 @@ func GetStringFromInterface(key interface{}) string {
 		ret = strconv.FormatBool(key.(bool))
 	case []byte:
 		ret = string(key.([]byte))
+	case json.Number:
+		ret = key.(json.Number).String()
+	default:
+		retBytes, _ := json.Marshal(key)
+		ret = string(retBytes)
 	}
 	return ret
 }
