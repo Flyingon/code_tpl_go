@@ -23,7 +23,18 @@ func TsToNow(ts int64) float64 {
 	return timeSubSec
 }
 
+// StrToTime 字符串解析到时间
+func StrToTime (msgTimeStr string)  {
+	msgTime, err := time.ParseInLocation("200601021504", msgTimeStr, time.Local)
+	if err != nil {
+		fmt.Printf("[ERROR] parse msgTime err: %v, msgTime: %s", err, msgTimeStr)
+		return
+	}
+	fmt.Printf("time: %v", msgTime)
+}
+
 func main() {
 	timeCost()
 	fmt.Printf("1578041406 to now pass: %0.2f ms\n", TsToNow(1578041406))
+	StrToTime("201911281609")
 }
