@@ -74,6 +74,40 @@ func GetBeforeTs(timeStr string) (tsStart, tsEnd time.Time, err error) {
 	return
 }
 
+// GetAfterTimeMaxHour
+// Valid time units are "ns", "us" (or "µs"), "ms", "s", "m", "h".
+func GetAfterTimeMaxHour(timeStr string) (time.Time, error) {
+	d, err := time.ParseDuration(timeStr)
+	nowTime := time.Now()
+	if err != nil {
+		return nowTime, err
+	}
+	return nowTime.Add(d), nil
+}
+
+// GetBeforeTs 获取n天后的时间
+func GetAfterTime(timeStr string) (time.Time, error) {
+	nowTime := time.Now()
+	numStr := timeStr[:len(timeStr)-1]
+	num, err := strconv.Atoi(numStr)
+	if err != nil {
+		return nowTime, err
+	}
+	unit := timeStr[len(timeStr)-1:]
+	getTime := nowTime
+	switch unit {
+	case "y":
+		getTime = nowTime.AddDate(+num, 0, 0)
+	case "m":
+		getTime = nowTime.AddDate(0, +num, 0)
+	case "d":
+		getTime = nowTime.AddDate(0, 0, +num)
+	default:
+		err = fmt.Errorf("unspport time format: %s", timeStr)
+	}
+	return getTime, nil
+}
+
 func main() {
 	fmt.Println("today begin: ", GetTodayBegin())
 	fmt.Println("ts time: ", GetTimeFormat(1558430118))
@@ -87,7 +121,8 @@ func main() {
 	timeSubSec := timeSub.Seconds()
 	fmt.Println(timeSubSec)
 
-
-
-	fmt.Println(costTime)
+	fmt.Printf("--------------%s-------------\n", "GetAflterTs")
+	fmt.Println(GetAfterTimeMaxHour("6Month"))
+	fmt.Printf("--------------%s-------------\n", "GetAfterTime")
+	fmt.Println(GetAfterTime("3d"))
 }

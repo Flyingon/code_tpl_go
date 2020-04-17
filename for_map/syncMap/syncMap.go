@@ -12,7 +12,11 @@ type MySyncMap struct {
 
 func (m MySyncMap) Print(k interface{}) {
 	value, ok := m.Load(k)
-	fmt.Println(value, ok)
+	fmt.Printf("value ptr: %p\n", &value)
+	fmt.Println("value: ", value, ok)
+	valueStr, ok := value.(string)
+	fmt.Printf("value str ptr: %p\n", &valueStr)
+	fmt.Println("value str: ", valueStr, ok)
 }
 
 func main() {
@@ -24,15 +28,15 @@ func main() {
 	syncMap.Store("Key1", "Value1")
 	syncMap.Store(4, 4)
 
-	//syncMap.Print("Key1")
+	syncMap.Print("Key1")
 	//syncMap.Print("Key1")
 	//syncMap.Print("Key3")
 	//syncMap.Print(4)
 	//syncMap.Delete("Key1")
 	//syncMap.Print("Key1")
 
-	syncMap.Range(func(k, v interface{}) bool {
-		fmt.Println(k, v)
-		return true
-	})
+	//syncMap.Range(func(k, v interface{}) bool {
+	//	fmt.Println(k, v)
+	//	return true
+	//})
 }

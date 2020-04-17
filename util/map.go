@@ -29,3 +29,11 @@ func MapCopyString(originalMap map[string]string) map[string]string {
 	}
 	return newMap
 }
+
+func MapCopyBytes(originalMap map[string][]byte) map[string][]byte {
+	newMap := make(map[string][]byte)
+	for key, value := range originalMap {
+		newMap[key] = value
+	}
+	return newMap
+}

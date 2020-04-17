@@ -6,6 +6,9 @@ var dataMap = make(map[string]interface{})
 
 func init(){
 	dataMap["nil"] = nil
+	chanInt := make(chan int)
+	fmt.Printf("chan ptr: %p\n", chanInt)
+	dataMap["a"] = chanInt
 }
 
 func mapAssertNotExist() {
@@ -15,4 +18,7 @@ func mapAssertNotExist() {
 
 func main() {
 	mapAssertNotExist()
+
+	getChan, _:= dataMap["a"]
+	fmt.Printf("get chan ptr: %p\n", getChan)
 }

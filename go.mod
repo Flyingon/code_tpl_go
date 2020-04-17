@@ -8,6 +8,7 @@ require (
 	github.com/golang/mock v1.4.3
 	github.com/gomodule/redigo v2.0.0+incompatible
 	github.com/google/go-cmp v0.4.0
+	go.uber.org/automaxprocs v1.3.0 // indirect
 	golang.org/x/net v0.0.0-20200324143707-d3edc9973b7e
 	golang.org/x/time v0.0.0-20191024005414-555d28b269f0
 )

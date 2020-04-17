@@ -116,9 +116,9 @@ func testFunc() {
 
 func main() {
 	//testFunc()
-	expression, err := govaluate.NewEvaluableExpression("! (foo > 4)")
+	expression, err := govaluate.NewEvaluableExpression("foo =~ 'aa' || foo =~ 'oooooo' ")
 	parameters := make(map[string]interface{}, 8)
-	parameters["foo"] = 3
+	parameters["foo"] = "wwwwooooo2222lllllas"
 
 	result, err := expression.Evaluate(parameters)
 	fmt.Println(result, err)
