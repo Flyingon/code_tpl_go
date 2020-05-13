@@ -9,4 +9,8 @@ func arrayInit () {
 
 func main() {
 	arrayInit()
+	intList := make([]int, 0, 10)
+	intList = append(intList, 1)
+	intList = append(intList, 2)
+	fmt.Println(len(intList))
 }

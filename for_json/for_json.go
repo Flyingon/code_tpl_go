@@ -35,10 +35,13 @@ func main() {
 	err := json.Unmarshal([]byte(data), &lowClassifierDetail)
 	fmt.Println(err)
 
-	abcJson := `{"a":"", "b":""}`
+	abcJson := `{"a":"1", "b":"2"}`
 	abc := ABC{}
 	errABC := json.Unmarshal([]byte(abcJson), &abc)
 	fmt.Printf("err: %v, abc: %+v\n", errABC, abc)
-	abcJsonNew, _ := json.Marshal(&abc)
-	fmt.Printf("abc new json: %s\n", abcJsonNew)
+	abcdJson := `{"a":"a", "b":"b", "d": "d"}`
+	errABC = json.Unmarshal([]byte(abcdJson), &abc)
+	fmt.Printf("err: %v, abc: %+v\n", errABC, abc)
+	//abcJsonNew, _ := json.Marshal(&abc)
+	//fmt.Printf("abc new json: %s\n", abcJsonNew)
 }
