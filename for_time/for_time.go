@@ -1,9 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"strconv"
 	"time"
-	"fmt"
 )
 
 // 返回当前时间格式
@@ -108,6 +108,45 @@ func GetAfterTime(timeStr string) (time.Time, error) {
 	return getTime, nil
 }
 
+// GetCurrentTimeKey 每天24小时根据interval分片，获取当前时间所在片的key，interval最好可以被3整除
+func GetCurrentTimeKey(interval int) string {
+	curTime := time.Now()
+	deltaHour := curTime.Hour()
+
+	if interval == 0 {
+		interval = 1
+	}
+	passUnits := deltaHour / interval
+	retTime := time.Date(curTime.Year(), curTime.Month(), curTime.Day(), passUnits*interval, 0, 0, 0, curTime.Location())
+
+	return retTime.Format("2006010215")
+}
+
+// GetBeforeTime 获取n天前的时间
+func GetBeforeTime(deltaStr string) (timeStr time.Time, err error) {
+	nowTime := time.Now()
+	numStr := deltaStr[:len(deltaStr)-1]
+	num, err := strconv.Atoi(numStr)
+	if err != nil {
+		return
+	}
+	unit := deltaStr[len(deltaStr)-1:]
+	getTime := nowTime
+	switch unit {
+	case "y":
+		getTime = nowTime.AddDate(-num, 0, 0)
+	case "m":
+		getTime = nowTime.AddDate(0, -num, 0)
+	case "d":
+		getTime = nowTime.AddDate(0, 0, -num)
+	case "h":
+		getTime = nowTime.Add(-time.Duration(num) * time.Hour)
+	default:
+		err = fmt.Errorf("unspport input format: %s", deltaStr)
+	}
+	return GetTimeBegin(getTime), err
+}
+
 func main() {
 	fmt.Println("today begin: ", GetTodayBegin())
 	fmt.Println("ts time: ", GetTimeFormat(1558430118))
@@ -125,4 +164,10 @@ func main() {
 	fmt.Println(GetAfterTimeMaxHour("6Month"))
 	fmt.Printf("--------------%s-------------\n", "GetAfterTime")
 	fmt.Println(GetAfterTime("3d"))
+	fmt.Printf("--------------%s-------------\n", "GetCurrentTimeKey")
+	fmt.Println(GetCurrentTimeKey(4))
+
+	fmt.Printf("--------------%s-------------\n", "GetBeforeTimeStr")
+	t, e := GetBeforeTime("24h")
+	fmt.Println(t.Unix(), e)
 }

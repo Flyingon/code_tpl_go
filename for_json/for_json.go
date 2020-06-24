@@ -25,7 +25,8 @@ func main() {
 	//contentStr := `{"a": 1, "b": "2", "c": {"d": 3, "e": "4"}}`
 	//contentMap := make(map[string]interface{})
 	//err := util.JSONUnMarshal(util.StringToBytesFast(contentStr), &contentMap)
-	//fmt.Println(err, contentMap)
+	//fmt.Println(err, contentMap).Marshal(&abc)
+	//	//fmt.Printf("abc new json: %s\n", abc
 	//for k, v := range contentMap {
 	//	fmt.Println(k, reflect.TypeOf(v))
 	//}
@@ -42,6 +43,5 @@ func main() {
 	abcdJson := `{"a":"a", "b":"b", "d": "d"}`
 	errABC = json.Unmarshal([]byte(abcdJson), &abc)
 	fmt.Printf("err: %v, abc: %+v\n", errABC, abc)
-	//abcJsonNew, _ := json.Marshal(&abc)
-	//fmt.Printf("abc new json: %s\n", abcJsonNew)
+	//abcJsonNew, _ := jsonJsonNew)
 }

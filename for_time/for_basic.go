@@ -33,8 +33,13 @@ func StrToTime (msgTimeStr string)  {
 	fmt.Printf("time: %v", msgTime)
 }
 
+
 func main() {
 	timeCost()
 	fmt.Printf("1578041406 to now pass: %0.2f ms\n", TsToNow(1578041406))
 	StrToTime("201911281609")
+
+	ts1 := int64(1589949475)
+	ts2 := time.Now().Unix()
+	fmt.Printf("%d, %d, %d\n", ts1, ts2, ts2-ts1)
 }

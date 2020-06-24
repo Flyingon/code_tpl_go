@@ -1,12 +1,17 @@
 package main
 
 import (
-	"../util"
+	"code_tpl_go/util"
 	"fmt"
+	"reflect"
 )
 
 func main() {
 	var oriData interface{}
-	data := util.GetStringFromInterface(oriData)
-	fmt.Println(data)
+	data := util.InterfaceToString(oriData)
+	fmt.Println(data, reflect.TypeOf(data))
+
+	for _, testStr := range []string {"1", "2", "0"} {
+		fmt.Println(util.InterfaceToInt(testStr))
+	}
 }

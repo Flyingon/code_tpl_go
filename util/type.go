@@ -23,8 +23,11 @@ func GetBytesByInterface(key interface{}) []byte {
 	return []byte(ret)
 }
 
-// 将interface{} 转换成 string
-func GetStringFromInterface(key interface{}) string {
+// InterfaceToString 将interface{} 转换成 string
+func InterfaceToString(key interface{}) string {
+	if key == nil { // nil返回空字符串，根据需求添加
+		return ""
+	}
 	var ret string
 	switch key.(type) {
 	case string:
@@ -107,7 +110,7 @@ func TranStringToType(valStr, keyType string) (interface{}, error) {
 }
 
 // GetZeroValueByType 获得指定类型到0值
-func GetZeroValueByType (keyType string) interface{} {
+func GetZeroValueByType(keyType string) interface{} {
 	var ret interface{}
 	switch keyType {
 	case "string":
@@ -140,6 +143,32 @@ func GetZeroValueByType (keyType string) interface{} {
 		ret = false
 	default:
 		ret = ""
+	}
+	return ret
+}
+
+// InterfaceToInt 将interface{} 转换成 int
+// 强制转换，忽略精度丢失; 忽略忽略错误，错误返回0
+func InterfaceToInt(key interface{}) int {
+	if key == nil { // nil返回零值，根据需求添加
+		return 0
+	}
+	var ret int
+	switch key.(type) {
+	case string:
+		tmp, _ := strconv.ParseFloat(key.(string), 64)
+		ret = int(tmp)
+	case int32:
+		ret = int(key.(int32))
+	case int64:
+		ret = int(key.(int64))
+	case int: //todo 是否需要统一所有int int64
+		ret = key.(int)
+	case float32:
+		ret = int(key.(float32))
+	case float64:
+		ret = int(key.(float64))
+	default:
 	}
 	return ret
 }
