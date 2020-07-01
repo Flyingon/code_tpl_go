@@ -147,27 +147,47 @@ func GetBeforeTime(deltaStr string) (timeStr time.Time, err error) {
 	return GetTimeBegin(getTime), err
 }
 
+// checkNowInDuration 检查当前时间是否在时间范围内: startTime-endTime
+func checkNowInRange(startTime, endTime, fmtStr string) (bool, error) {
+	sTime, err := time.ParseInLocation(fmtStr, startTime, time.Local)
+	if err != nil {
+		return false, err
+	}
+	eTime, err := time.ParseInLocation(fmtStr, endTime, time.Local)
+	if err != nil {
+		return false, err
+	}
+	nTime := time.Now()
+	if nTime.Sub(sTime) < 0 || nTime.Sub(eTime) > 0 {
+		return false, nil
+	}
+	return true, nil
+}
+
 func main() {
-	fmt.Println("today begin: ", GetTodayBegin())
-	fmt.Println("ts time: ", GetTimeFormat(1558430118))
-	fmt.Println("ts begin: ", GetTsBegin(1558430118))
-	fmt.Println(GetBeforeTs("0d"))
+	//fmt.Println("today begin: ", GetTodayBegin())
+	//fmt.Println("ts time: ", GetTimeFormat(1558430118))
+	//fmt.Println("ts begin: ", GetTsBegin(1558430118))
+	//fmt.Println(GetBeforeTs("0d"))
+	//
+	//timeStamp := 1578041406
+	//timeNow := time.Now()
+	//timeTs := time.Unix(int64(timeStamp), 0)
+	//timeSub := timeNow.Sub(timeTs)
+	//timeSubSec := timeSub.Seconds()
+	//fmt.Println(timeSubSec)
+	//
+	//fmt.Printf("--------------%s-------------\n", "GetAflterTs")
+	//fmt.Println(GetAfterTimeMaxHour("6Month"))
+	//fmt.Printf("--------------%s-------------\n", "GetAfterTime")
+	//fmt.Println(GetAfterTime("3d"))
+	//fmt.Printf("--------------%s-------------\n", "GetCurrentTimeKey")
+	//fmt.Println(GetCurrentTimeKey(4))
+	//
+	//fmt.Printf("--------------%s-------------\n", "GetBeforeTimeStr")
+	//t, e := GetBeforeTime("24h")
+	//fmt.Println(t.Unix(), e)
 
-	timeStamp := 1578041406
-	timeNow := time.Now()
-	timeTs := time.Unix(int64(timeStamp), 0)
-	timeSub := timeNow.Sub(timeTs)
-	timeSubSec := timeSub.Seconds()
-	fmt.Println(timeSubSec)
-
-	fmt.Printf("--------------%s-------------\n", "GetAflterTs")
-	fmt.Println(GetAfterTimeMaxHour("6Month"))
-	fmt.Printf("--------------%s-------------\n", "GetAfterTime")
-	fmt.Println(GetAfterTime("3d"))
-	fmt.Printf("--------------%s-------------\n", "GetCurrentTimeKey")
-	fmt.Println(GetCurrentTimeKey(4))
-
-	fmt.Printf("--------------%s-------------\n", "GetBeforeTimeStr")
-	t, e := GetBeforeTime("24h")
-	fmt.Println(t.Unix(), e)
+	ret, e := checkNowInRange("2020-07-01T16:00:00.000Z", "2020-07-01T16:00:00.000Z", "2006-01-02T15:04:05.000Z")
+	fmt.Println(ret, e)
 }
