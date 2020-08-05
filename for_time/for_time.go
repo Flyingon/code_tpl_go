@@ -164,6 +164,16 @@ func checkNowInRange(startTime, endTime, fmtStr string) (bool, error) {
 	return true, nil
 }
 
+// GetDeltaDayTs 获取时间戳curTs的n天差时间前后的时间戳
+func GetDeltaDayTs(curTs int64, delta int) (tsStart, tsEnd int64, err error) {
+	curTime := time.Unix(curTs, 0)
+	getTime := curTime.AddDate(0, 0, delta)
+	NextTime := curTime.AddDate(0, 0, delta+1)
+	tsStart = GetTimeBegin(getTime).Unix()
+	tsEnd = GetTimeBegin(NextTime).Unix()
+	return
+}
+
 func main() {
 	//fmt.Println("today begin: ", GetTodayBegin())
 	//fmt.Println("ts time: ", GetTimeFormat(1558430118))
@@ -188,6 +198,7 @@ func main() {
 	//t, e := GetBeforeTime("24h")
 	//fmt.Println(t.Unix(), e)
 
-	ret, e := checkNowInRange("2020-07-01T16:00:00.000Z", "2020-07-01T16:00:00.000Z", "2006-01-02T15:04:05.000Z")
-	fmt.Println(ret, e)
+	//ret, e := checkNowInRange("2020-07-01T16:00:00.000Z", "2020-07-01T16:00:00.000Z", "2006-01-02T15:04:05.000Z")
+	//fmt.Println(ret, e)
+	fmt.Println(GetDeltaDayTs(1594820963, 0))
 }

@@ -25,14 +25,21 @@ func addElem(array *[]string) {
 }
 
 func main() {
-	//arrayInit()
-	//intList := make([]int, 0, 10)
-	//intList = append(intList, 1)
-	//intList = append(intList, 2)
-	//fmt.Println(len(intList), intList)
-	var list2 []string
-	fmt.Println(len(list2))
-	addElem(&list2)
-	fmt.Println(list2)
+	data := map[string]map[string]interface{}{
+		"1": {"a": "a"},
+		"2": {"b": "b"},
+		"3": {"c": "c"},
+	}
+	dataNew := make([]map[string]interface{}, 0 ,len(data))
+	for k, v :=range data {
+		fmt.Printf("%s: %p\n", k, &v)
+		v["sub_id"] = k
+		dataNew = append(dataNew, v)
+	}
+	fmt.Printf("dataNew: %v", dataNew)
+	//var list2 []string
+	//fmt.Println(len(list2))
+	//addElem(&list2)
+	//fmt.Println(list2)
 	//arrayCopy()
 }
