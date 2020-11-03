@@ -7,8 +7,8 @@ import (
 	"testing"
 	"time"
 
-	"git.code.oa.com/trpc-go/trpc-go/pool/connpool"
-	"git.code.oa.com/trpc-go/trpc-go/transport"
+	"code_tpl_go/rpc_server/pool/connpool"
+	"code_tpl_go/rpc_server/transport"
 	"github.com/stretchr/testify/assert"
 )
 

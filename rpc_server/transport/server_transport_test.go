@@ -8,9 +8,7 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/assert"
-
-	_ "git.code.oa.com/trpc-go/trpc-go"
-	"git.code.oa.com/trpc-go/trpc-go/transport"
+	"code_tpl_go/rpc_server/transport"
 )
 
 func TestNewServerTransport(t *testing.T) {

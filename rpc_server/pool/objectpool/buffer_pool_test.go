@@ -5,7 +5,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"git.code.oa.com/trpc-go/trpc-go/pool/objectpool"
+	"code_tpl_go/rpc_server/pool/objectpool"
 )
 
 func TestBufferPool_Get(t *testing.T) {

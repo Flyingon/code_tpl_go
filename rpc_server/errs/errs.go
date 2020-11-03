@@ -3,44 +3,6 @@ package errs
 
 import "fmt"
 
-/*
-const (
-	// 调用成功
-	TrpcRetCode_TRPC_INVOKE_SUCCESS TrpcRetCode = 0
-	// 协议错误码
-	// 服务端解码错误
-	TrpcRetCode_TRPC_SERVER_DECODE_ERR TrpcRetCode = 1
-	// 服务端编码错误
-	TrpcRetCode_TRPC_SERVER_ENCODE_ERR TrpcRetCode = 2
-	// service或者func路由错误码
-	// 服务端没有调用相应的service实现
-	TrpcRetCode_TRPC_SERVER_NOSERVICE_ERR TrpcRetCode = 11
-	// 服务端没有调用相应的接口实现
-	TrpcRetCode_TRPC_SERVER_NOFUNC_ERR TrpcRetCode = 12
-	// 队列超时或过载错误码
-	// 请求在服务端超时
-	TrpcRetCode_TRPC_SERVER_TIMEOUT_ERR TrpcRetCode = 21
-	// 请求在服务端过载
-	TrpcRetCode_TRPC_SERVER_OVERLOAD_ERR TrpcRetCode = 22
-	// 超时错误码
-	// 请求在客户端调用超时
-	TrpcRetCode_TRPC_CLIENT_INVOKE_TIMEOUT_ERR TrpcRetCode = 101
-	// 网络相关错误码
-	// 客户端连接错误
-	TrpcRetCode_TRPC_CLIENT_CONNECT_ERR TrpcRetCode = 111
-	// 协议相关错误码
-	// 客户端编码错误
-	TrpcRetCode_TRPC_CLIENT_ENCODE_ERR TrpcRetCode = 121
-	// 客户端解码错误
-	TrpcRetCode_TRPC_CLIENT_DECODE_ERR TrpcRetCode = 122
-	// 路由相关错误码
-	// 客户端选ip路由错误
-	TrpcRetCode_TRPC_CLIENT_ROUTER_ERR TrpcRetCode = 131
-	// 未明确的错误
-	TrpcRetCode_TRPC_INVOKE_UNKNOWN_ERR TrpcRetCode = 999
-)
-*/
-
 // trpc return code
 const (
 	RetOK = 0

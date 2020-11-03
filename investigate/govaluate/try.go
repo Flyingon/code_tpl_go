@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/Knetic/govaluate"
 	"github.com/buger/jsonparser"
+	"reflect"
 )
 
 var evaluableFunctionsV1 = map[string]govaluate.ExpressionFunction{
@@ -20,7 +21,6 @@ var evaluableFunctionsV1 = map[string]govaluate.ExpressionFunction{
 			} else {
 				return nil, fmt.Errorf("key[%v] is not valid", arg)
 			}
-
 		}
 		val, err := jsonparser.GetInt([]byte(data), keys...)
 		if err != nil {
@@ -116,10 +116,11 @@ func testFunc() {
 
 func main() {
 	//testFunc()
-	expression, err := govaluate.NewEvaluableExpression("foo =~ 'aa' || foo =~ 'oooooo' ")
-	parameters := make(map[string]interface{}, 8)
-	parameters["foo"] = "wwwwooooo2222lllllas"
+	expression, err := govaluate.NewEvaluableExpression("1000 <= credits  && credits < 5000")
+	parameters := make(map[string]interface{})
+	parameters["credits"] = 5000
 
 	result, err := expression.Evaluate(parameters)
-	fmt.Println(result, err)
+	fmt.Println(result, reflect.TypeOf(result), err)
+
 }

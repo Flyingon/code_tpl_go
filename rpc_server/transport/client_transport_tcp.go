@@ -5,9 +5,9 @@ import (
 	"net"
 	"time"
 
-	"git.code.oa.com/trpc-go/trpc-go/codec"
-	"git.code.oa.com/trpc-go/trpc-go/errs"
-	"git.code.oa.com/trpc-go/trpc-go/pool/connpool"
+	"code_tpl_go/rpc_server/codec"
+	"code_tpl_go/rpc_server/errs"
+	"code_tpl_go/rpc_server/pool/connpool"
 )
 
 // tcpRoundTrip 发送tcp请求 支持 1.send 2. sendAndRcv 3. keepalive 4. multiplex

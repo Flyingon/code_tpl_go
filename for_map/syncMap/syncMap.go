@@ -35,8 +35,8 @@ func main() {
 	//syncMap.Delete("Key1")
 	//syncMap.Print("Key1")
 
-	//syncMap.Range(func(k, v interface{}) bool {
-	//	fmt.Println(k, v)
-	//	return true
-	//})
+	syncMap.Range(func(k, v interface{}) bool {
+		fmt.Println(k, v)
+		return true
+	})
 }

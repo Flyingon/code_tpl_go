@@ -4,7 +4,7 @@ import (
 	"io"
 	"testing"
 
-	"git.code.oa.com/trpc-go/trpc-go/codec"
+	"code_tpl_go/rpc_server/codec"
 	"github.com/stretchr/testify/assert"
 )
 

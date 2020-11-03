@@ -11,8 +11,8 @@ import (
 	"log"
 	"time"
 
-	"git.code.oa.com/trpc-go/trpc-go/codec"
-	"git.code.oa.com/trpc-go/trpc-go/transport"
+	"code_tpl_go/rpc_server/codec"
+	"code_tpl_go/rpc_server/transport"
 )
 
 func clientInvokeServer(network string) {

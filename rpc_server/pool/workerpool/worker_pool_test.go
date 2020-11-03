@@ -5,7 +5,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"git.code.oa.com/trpc-go/trpc-go/pool/workerpool"
+	"code_tpl_go/rpc_server/pool/workerpool"
 )
 
 func TestNew(t *testing.T) {

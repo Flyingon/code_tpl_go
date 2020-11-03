@@ -1,7 +1,7 @@
 package transport
 
 import (
-	"git.code.oa.com/trpc-go/trpc-go/codec"
+	"code_tpl_go/rpc_server/codec"
 )
 
 // ListenServeOptions server每次启动参数

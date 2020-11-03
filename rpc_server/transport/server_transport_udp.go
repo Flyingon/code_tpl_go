@@ -6,9 +6,9 @@ import (
 	"net"
 	"time"
 
-	"git.code.oa.com/trpc-go/trpc-go/codec"
-	"git.code.oa.com/trpc-go/trpc-go/log"
-	"git.code.oa.com/trpc-go/trpc-go/metrics"
+	"code_tpl_go/rpc_server/codec"
+	"code_tpl_go/rpc_server/log"
+	"code_tpl_go/rpc_server/metrics"
 )
 
 func (s *serverTransport) serveUDP(ctx context.Context, rwc *net.UDPConn, opts *ListenServeOptions) error {

@@ -1,8 +1,8 @@
 package transport
 
 import (
-	"git.code.oa.com/trpc-go/trpc-go/codec"
-	"git.code.oa.com/trpc-go/trpc-go/pool/connpool"
+	"code_tpl_go/rpc_server/codec"
+	"code_tpl_go/rpc_server/pool/connpool"
 )
 
 // RoundTripOptions 当次请求的可选参数

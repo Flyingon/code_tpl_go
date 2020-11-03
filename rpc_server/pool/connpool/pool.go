@@ -5,7 +5,7 @@ import (
 	"net"
 	"time"
 
-	"git.code.oa.com/trpc-go/trpc-go/codec"
+	"code_tpl_go/rpc_server/codec"
 )
 
 // GetOptions get conn configuration

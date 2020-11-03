@@ -6,7 +6,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"git.code.oa.com/trpc-go/trpc-go/errs"
+	"code_tpl_go/rpc_server/errs"
 )
 
 // go test -v -coverprofile=cover.out

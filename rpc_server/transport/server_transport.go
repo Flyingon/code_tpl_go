@@ -8,7 +8,7 @@ import (
 	"runtime"
 	"time"
 
-	reuseport "git.code.oa.com/trpc-go/go_reuseport"
+	reuseport "code_tpl_go/rpc_server/go_reuseport"
 )
 
 // DefaultServerTransport ServerTransport默认实现
