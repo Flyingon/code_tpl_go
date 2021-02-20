@@ -3,79 +3,31 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	jsoniter "github.com/json-iterator/go"
+	"reflect"
+	"strings"
 )
 
-type LowClassifierDetail struct {
-	LowClassifierList []LowClassifierOne `json:"low"`
-}
-
-type LowClassifierOne struct {
-	Confidence *float64 `json:"confidence"`
-	Level      *int     `json:"level"`
-	Score      *int     `json:"score"`
-	Type       *int     `json:"type"`
-}
-
-type ABC struct {
-	A string `json:"a,omitempty"`
-	B string `json:"b"`
-}
 
 
-type TalkDetails struct {
-	TalkId         int    `json:"talkId"`
-	Attention      string `json:"attention"`
-	BgColor        string `json:"bgColor"`
-	BgImg          string `json:"bgImg"`
-	BookBind       string `json:"bookBind"`
-	CircleMasterId int    `json:"circleMasterId"`
-	Class          string `json:"class"`
-	DynamicNum     string `json:"dynamicNum"`
-	Extension      string `json:"extension"`
-	Introduce      string `json:"introduce"`
-	Link           string `json:"link"`
-	TabName        string `json:"tabName"`
-	TabEnd         string `json:"tab_end"`
-	TabStart       string `json:"tab_start"`
-	TalkImg        string `json:"talkImg"`
-	TalkName       string `json:"talkName"`
-	ToTop          string `json:"toTop"`
-	ToTopEnd       string `json:"to_top_end"`
-	ToTopStart     string `json:"to_top_start"`
+func main2() {
+	dataJson := `{"a": "123", "b": 11111111111111111111111}`
+	commonMap := make(map[string]interface{})
+
+	decoder := jsoniter.NewDecoder(strings.NewReader(dataJson))
+	decoder.UseNumber()
+	err := decoder.Decode(&commonMap)
+	fmt.Println(err)
+	fmt.Println(commonMap)
+	fmt.Println(reflect.TypeOf(commonMap["a"]))
+	fmt.Println(reflect.TypeOf(commonMap["b"]))
+	data, _ := commonMap["c"].(json.Number)
+	fmt.Println("data: ", data.String())
 }
 
 func main() {
-	//contentStr := `{"a": 1, "b": "2", "c": {"d": 3, "e": "4"}}`
-	//contentMap := make(map[string]interface{})
-	//err := util.JSONUnMarshal(util.StringToBytesFast(contentStr), &contentMap)
-	//fmt.Println(err, contentMap).Marshal(&abc)
-	//	//fmt.Printf("abc new json: %s\n", abc
-	//for k, v := range contentMap {
-	//	fmt.Println(k, reflect.TypeOf(v))
-	//}
-
-	//data := `{"_ctime":"2020-06-17T11:19:16.000Z","_id":null,"_mtime":"2020-06-18T08:35:04.000Z","attention":"1","bgColor":"","bgImg":"https://testwuji-70169.sz.gfp.tencent-cloud.com/imgUpload/story_admin.TalkDetails/20200618_nr7alnzawtp1.png","bookBind":"d'd'd","circleMasterId":0,"class":"2","dynamicNum":"1","extension":null,"introduce":"山山水水反馈当手机卡丽枫酒店说了句法看电视剧反馈了圣诞节快乐返京东时空裂缝接口都是李俊峰看来都是","last_modified_time":"2020-06-18T08:35:04.000Z","last_modified_user":"seandyli","link":null,"state":null,"tabName":null,"tab_end":"2020-06-18T16:00:00.000Z","tab_start":"2020-06-23T16:00:00.000Z","talkId":1,"talkImg":"https://testwuji-70169.sz.gfp.tencent-cloud.com/imgUpload/story_admin.TalkDetails/20200617_4rdb4ruvjfj1.png","talkName":"哒哒哒","toTop":"1","to_top_end":null,"to_top_start":null}`
-	//dataMap := make(map[string]interface{})
-	////td := TalkDetails{}
-	//err := json.Unmarshal([]byte(data), &dataMap)
-	//fmt.Println(err)
-	//fmt.Printf("%+v", dataMap)
-
-	var testList []*string
-	json.Unmarshal([]byte(`["s","c","d"]`), &testList)
-	fmt.Printf("testList: %v\n", testList)
-	//data := `{"low":[{"confidence":0.37699482,"level":0,"score":0,"type":12},{"confidence":0,"level":0,"score":0,"type":8},{"confidence":0.01519581,"level":0,"score":0,"type":13},{"confidence":0.01,"level":0,"score":0,"type":17},{"confidence":0.25547466,"level":0,"score":0,"type":0},{"level":0,"score":0,"type":5},{"confidence":0.26630497,"level":0,"score":0,"type":10},{"confidence":0,"level":0,"score":0,"type":21},{"level":0,"score":0,"type":22},{"level":0,"score":0,"sub_lowinfo":[{"sub_info":"","sub_level":0,"sub_type":0},{"sub_info":"","sub_level":0,"sub_type":1},{"sub_info":"","sub_level":0,"sub_type":2},{"sub_info":"","sub_level":0,"sub_type":3},{"sub_info":"","sub_level":0,"sub_type":4},{"sub_info":"","sub_level":0,"sub_type":5}],"type":23},{"confidence":1,"level":2,"score":0,"sub_lowinfo":[{"sub_info":"","sub_level":0,"sub_type":0},{"sub_info":"","sub_level":2,"sub_type":1}],"type":20},{"level":0,"score":0,"type":26},{"level":0,"score":0,"type":27},{"level":0,"score":0,"sub_lowinfo":[{"sub_info":"","sub_level":0,"sub_type":0},{"sub_info":"","sub_level":0,"sub_type":1},{"sub_info":"","sub_level":0,"sub_type":2},{"sub_info":"","sub_level":0,"sub_type":3},{"sub_info":"","sub_level":0,"sub_type":4},{"sub_info":"","sub_level":0,"sub_type":5},{"sub_info":"","sub_level":0,"sub_type":6},{"sub_info":"","sub_level":0,"sub_type":7},{"sub_info":"","sub_level":0,"sub_type":8},{"sub_info":"","sub_level":0,"sub_type":9}],"type":24},{"confidence":0,"level":0,"score":0,"type":14},{"level":0,"score":0,"type":15},{"level":0,"score":0,"type":16},{"level":0,"score":0,"type":19},{"level":0,"score":0,"type":18},{"confidence":0.25547466,"level":0,"score":0,"sub_lowinfo":[{"sub_confidence":0.25547466,"sub_level":0,"sub_type":1},{"sub_confidence":0,"sub_level":0,"sub_type":2},{"sub_confidence":0,"sub_level":0,"sub_type":3}],"type":31},{"confidence":0.0019000173,"level":0,"score":0,"type":32},{"confidence":0.0038,"level":0,"score":0,"type":33}]}`
-	//
-	//lowClassifierDetail := LowClassifierDetail{}
-	//err := json.Unmarshal([]byte(data), &lowClassifierDetail)
-	//fmt.Println(err)
-	//
-	//abcJson := `{"a":"1", "b":"2"}`
-	//abc := ABC{}
-	//errABC := json.Unmarshal([]byte(abcJson), &abc)
-	//fmt.Printf("err: %v, abc: %+v\n", errABC, abc)
-	//abcdJson := `{"a":"a", "b":"b", "d": "d"}`
-	//errABC = json.Unmarshal([]byte(abcdJson), &abc)
-	//fmt.Printf("err: %v, abc: %+v\n", errABC, abc)
-	//abcJsonNew, _ := jsonJsonNew)
+	var params []interface{}
+	dataJson := `["user:info:100422","total_credits",4653000]`
+	jsoniter.Unmarshal([]byte(dataJson), &params)
+	fmt.Println(params)
 }

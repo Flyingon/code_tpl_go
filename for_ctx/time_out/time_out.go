@@ -11,12 +11,12 @@ func run(ctx context.Context){
 	for {
 		select {
 		case <-ctx.Done():
-			fmt.Println("timeout")
+			fmt.Println("run timeout", time.Now().String())
 			return
 		default:
 			// 注意: 这里不能有阻塞操作，io或者sleep，否则还是等待相应之间，这样写只能控制每次循环前判断是否超时
-			JustPrint()
-			//fmt.Println(ctx.Value(key))
+			fmt.Printf("run running time: %s\n", time.Now().String())
+			time.Sleep(1*time.Second)
 		}
 	}
 }
@@ -26,29 +26,13 @@ func run2(ctx context.Context) () {
 	for {
 		select {
 		case <-ctx.Done():
-			fmt.Println("timeout")
+			fmt.Println("run2 timeout", time.Now().String())
 			return
 		default:
-			JustPrint()
-			//time.Sleep(10*time.Second)
-			return
+			fmt.Printf("run2 running time: %s\n", time.Now().String())
+			time.Sleep(1*time.Second)
 		}
 	}
-}
-
-func JustPrint() {
-	fmt.Println(time.Now())
-	//time.Sleep(5*time.Second)
-	//fmt.Println("end:" , time.Now())
-	//i := 0
-	//for {
-	//	if i >= 3 {
-	//		break
-	//	}
-	//	fmt.Println(time.Now())
-	//	time.Sleep(1*time.Second)
-	//	i ++
-	//}
 }
 
 func main() {
@@ -56,7 +40,8 @@ func main() {
 	ctx, cancel := context.WithTimeout(context.Background(),3 * time.Second)
 	defer cancel()
 	//value := context.WithValue(ctx,key,"This is my test")
+	nCtx, _ := context.WithTimeout(ctx, 5*time.Second)
 	go run(ctx)
-	//go run2(ctx)
+	go run2(nCtx)
 	time.Sleep(10 * time.Second)
 }

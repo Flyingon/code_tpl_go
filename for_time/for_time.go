@@ -200,5 +200,16 @@ func main() {
 
 	//ret, e := checkNowInRange("2020-07-01T16:00:00.000Z", "2020-07-01T16:00:00.000Z", "2006-01-02T15:04:05.000Z")
 	//fmt.Println(ret, e)
-	fmt.Println(GetDeltaDayTs(1594820963, 0))
+	begin, end, _:= GetDeltaDayTs(time.Now().Unix(), -1)
+	fmt.Println((end-1-begin) / 86400)
+	//now := time.Now()
+	//offset := int(time.Monday - now.Weekday())
+	//if offset > 0 {
+	//	offset = -6
+	//}
+	//weekStartDate := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, time.Local).AddDate(0, 0, offset)
+	//for t:=weekStartDate; now.Sub(t) > 0; t = t.Add(24 * time.Hour) {
+	//	fmt.Println(t.Format("20060102"))
+	//}
+	//for t := time.Monday; time.Now().Sub(t) < 0; t
 }

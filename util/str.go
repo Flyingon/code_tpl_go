@@ -2,6 +2,7 @@ package util
 
 import (
 	"reflect"
+	"strings"
 	"unicode/utf8"
 	"unsafe"
 )
@@ -77,4 +78,51 @@ func SubStrDecodeRuneInString(s string, length int) string {
 	}
 
 	return s[:n]
+}
+
+// keyAddElem 添加元素
+// 输入: curVal: "a,b,c" addVal: "d,e" splitKey: ","
+// 返回: a,b,c -> a,b,c,d,e
+func keyAddElems(curVal string, addVal string, splitKey string) string {
+	newVal := curVal
+	if curVal != "" && addVal != "" {
+		oldValList := strings.Split(curVal, splitKey)
+		addValList := strings.Split(addVal, splitKey)
+		oldValMap := make(map[string]bool)
+		for _, oldKey := range oldValList {
+			oldValMap[oldKey] = true
+		}
+		for _, add := range addValList {
+			if !oldValMap[add] {
+				oldValList = append(oldValList, add)
+			}
+		}
+		newVal = strings.Join(oldValList, splitKey)
+	} else if curVal == "" {
+		newVal = addVal
+	}
+	return newVal
+}
+
+// keyDelElems 添加元素
+// 输入: curVal: "a,b,c,d,e" delVal: "a,e" splitKey: ","
+// 返回: b,c,d
+func keyDelElems(curVal string, delVal string, splitKey string) string {
+	newVal := curVal
+	if curVal != "" && delVal != "" {
+		oldValList := strings.Split(curVal, splitKey)
+		delValList := strings.Split(delVal, splitKey)
+		delValMap := make(map[string]bool)
+		for _, key := range delValList {
+			delValMap[key] = true
+		}
+		newValList := make([]string, 0, len(oldValList))
+		for _, val := range oldValList {
+			if !delValMap[val] {
+				newValList = append(newValList, val)
+			}
+		}
+		newVal = strings.Join(newValList, splitKey)
+	}
+	return newVal
 }

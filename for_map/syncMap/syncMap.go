@@ -26,7 +26,7 @@ func main() {
 	syncMap.Store("Key2", "Value2")
 	syncMap.Store("Key3", 2)
 	syncMap.Store("Key1", "Value1")
-	syncMap.Store(4, 4)
+	//syncMap.Store(4, 4)
 
 	syncMap.Print("Key1")
 	//syncMap.Print("Key1")
@@ -35,8 +35,12 @@ func main() {
 	//syncMap.Delete("Key1")
 	//syncMap.Print("Key1")
 
+	var ret []string
 	syncMap.Range(func(k, v interface{}) bool {
 		fmt.Println(k, v)
+		kStr := k.(string)
+		ret = append(ret, kStr)
 		return true
 	})
+	fmt.Printf("ret: %+v\n", ret)
 }

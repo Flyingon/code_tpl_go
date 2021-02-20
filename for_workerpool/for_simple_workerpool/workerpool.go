@@ -20,18 +20,17 @@ func NewSimplePoll(workers int) *SimplePool {
 	//初始化协程池（添加任务前）时就根据指定的并发量去读取管道并执行，以免添加任务时管道阻塞
 	for i := 0; i < workers; i++ {
 		go func() {
+			defer p.wg.Done()
 			defer func() {
 				// 捕获异常 防止waitGroup阻塞
 				if err := recover(); err != nil {
 					fmt.Println(err)
-					p.wg.Done()
 				}
 			}()
 			// 从workChannel中取出任务执行
 			for fn := range p.work {
 				fn()
 			}
-			p.wg.Done()
 		}()
 	}
 	return p

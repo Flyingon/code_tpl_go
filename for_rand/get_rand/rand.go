@@ -6,8 +6,19 @@ import (
 	"time"
 )
 
+//生成1个[start,end)结束的不重复的随机数
+func GenerateRandomNumber(start int, end int) int {
+	//范围检查
+	if end < start {
+		return -1
+	}
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	num := r.Intn(end-start) + start
+	return num
+}
+
 //生成count个[start,end)结束的不重复的随机数
-func GenerateRandomNumber(start int, end int, count int) []int {
+func GenerateRandomNumbers(start int, end int, count int) []int {
 	//范围检查
 	if end < start || (end-start) < count {
 		return nil
@@ -41,7 +52,7 @@ func GenerateRandomNumber(start int, end int, count int) []int {
 func main() {
 	for i:=0; i < 1000;i ++ {
 		sTime := time.Now()
-		fmt.Println(GenerateRandomNumber(0, 3, 4))
+		fmt.Println(GenerateRandomNumbers(0, 3, 4))
 		costTime := time.Now().Sub(sTime)
 		fmt.Printf("cost time: %d ms\n", costTime.Milliseconds())
 	}
