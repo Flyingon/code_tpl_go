@@ -14,3 +14,5 @@
 # ide config
 .idea
 .DS_Store
+
+go.sum
