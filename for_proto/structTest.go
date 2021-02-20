@@ -8,7 +8,7 @@ import (
 )
 
 // Marshaler jsonpb序列化结构体，可自己更改参数
-var Marshaler = jsonpb.Marshalr{EmitDefaults: true, OrigName: true, EnumsAsInts: true}
+var Marshaler = jsonpb.Marshaler{EmitDefaults: true, OrigName: true, EnumsAsInts: true}
 
 // Unmarshaler jsonpb反序列化结构体，可自己更改参数
 var Unmarshaler = jsonpb.Unmarshaler{AllowUnknownFields: true}
