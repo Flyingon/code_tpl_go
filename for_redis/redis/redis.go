@@ -49,9 +49,9 @@ type Redis struct {
 }
 
 // New 新建一个redis后端请求结构体
-// address="10.100.67.132:9736"
+// address="10.100.100.100:9736"
 // timeout="800ms"
-// password="!QAZ@WSX3e"
+// password="XXXXXXXX"
 // maxIdle = 100
 // maxActive = 0 // no limit
 func New(conf RedisConf) *Redis {
