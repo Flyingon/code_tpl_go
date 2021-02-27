@@ -15,6 +15,7 @@ require (
 	github.com/golang/protobuf v1.4.3
 	github.com/gomodule/redigo v1.8.4
 	github.com/google/go-cmp v0.5.4
+	github.com/gorilla/websocket v1.4.2
 	github.com/jmoiron/sqlx v1.3.1 // indirect
 	github.com/json-iterator/go v1.1.10
 	github.com/mailru/easyjson v0.7.7 // indirect
