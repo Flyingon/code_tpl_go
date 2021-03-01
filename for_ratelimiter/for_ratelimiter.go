@@ -12,7 +12,7 @@ var rateLimiter = rate.NewLimiter(10, 10)
 
 func PrintNum(num int) {
 	fmt.Printf("%d, excute: %d\n", time.Now().Unix(), num)
-	time.Sleep(200*time.Millisecond)
+	time.Sleep(200 * time.Millisecond)
 }
 
 func rateLimitTest() {
