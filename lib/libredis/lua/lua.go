@@ -4,15 +4,16 @@ import (
 	redigo "github.com/gomodule/redigo/redis"
 )
 
-
-
-var ZPopAndRecord *redigo.Script
-var ZPOPMAX *redigo.Script
+var SPopToZSet *redigo.Script
+var ZPopMax *redigo.Script
 var ZPopByScore *redigo.Script
+var ZPopByScoreToZSet *redigo.Script
+var ZPopMaxToZSet *redigo.Script
 
 func init() {
-	ZPopAndRecord = redigo.NewScript(2, LuaScriptKeyPopAndRecord)
-	ZPopByScore = redigo.NewScript(1, LuaScriptZPopByScore)
-	ZPOPMAX = redigo.NewScript(1, LuaScriptZPopMax)
+	SPopToZSet = redigo.NewScript(2, LSSPopToZSet)
+	ZPopByScore = redigo.NewScript(1, LSZPopByScore)
+	ZPopMax = redigo.NewScript(1, LsZPopMax)
+	ZPopByScoreToZSet = redigo.NewScript(2, LSZPopByScoreToZSet)
+	ZPopMaxToZSet = redigo.NewScript(2, LSZPopMaxToZSet)
 }
-
