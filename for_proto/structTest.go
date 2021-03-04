@@ -15,7 +15,7 @@ var Unmarshaler = jsonpb.Unmarshaler{AllowUnknownFields: true}
 
 func main() {
 	res := test.Result{}
-	data := `{"JSON": {"a": 1, "b": "2", "c": {"c": "c"}}, "JSON2": {"a": 111111111122222222, "b": "2", "c": {"c": "c"}}}`
+	data := `{"JSON": {"a": 1, "b": "2", "c": {"c": "c"}}, "JSON2": {"a": 111111111122222222, "b": "", "c": {"c": "c"}}}`
 	e := Unmarshaler.Unmarshal(bytes.NewReader([]byte(data)), &res)
 	//e := json.Unmarshal([]byte(data), &res)
 	fmt.Println(e, res.JSON2)
