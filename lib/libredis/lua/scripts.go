@@ -61,6 +61,7 @@ var LSZPopByScoreToZSet = `
 redis.replicate_commands()
 local srcKey = KEYS[1]
 local dstKey = KEYS[2]
+local scoreKey = KEYS[3]
 local minScore = ARGV[1]
 local maxScore = ARGV[2]
 local order = ARGV[3]
@@ -80,8 +81,21 @@ end
 
 for i=1,#zSetData,2 do
  local key = zSetData[i]
- local num = redis.call('ZREM', srcKey, key)
- redis.call('ZADD', dstKey, newScore, key)
+--解析score
+  local taskType = ""
+  for token in string.gmatch(key, "[^|]+") do
+    taskType = token
+    break
+  end
+  local addScore = redis.call('HGET', scoreKey, taskType)
+--计算新score
+  local score = newScore
+  if addScore ~= nil and addScore ~= false
+  then
+    score = newScore + addScore
+  end
+  local num = redis.call('ZREM', srcKey, key)
+  redis.call('ZADD', dstKey, score, key)
 end
 return zSetData
 `
@@ -90,6 +104,7 @@ var LSZPopMaxToZSet = `
 redis.replicate_commands()
 local srcKey = KEYS[1]
 local dstKey = KEYS[2]
+local scoreKey = KEYS[3]
 local popSize = tonumber(ARGV[1])
 local newScore = tonumber(ARGV[2])
 if popSize < 1
@@ -105,8 +120,21 @@ end
 
 for i=1,#zSetData,2 do
   local key = zSetData[i]
+--解析score
+  local taskType = ""
+  for token in string.gmatch(key, "[^|]+") do
+    taskType = token
+    break
+  end
+  local addScore = redis.call('HGET', scoreKey, taskType)
+--计算新score
+  local score = newScore
+  if addScore ~= nil and addScore ~= false
+  then
+    score = newScore + addScore
+  end
   redis.call('ZREM', srcKey, key)
-  redis.call('ZADD', dstKey, newScore, key)
+  redis.call('ZADD', dstKey, score, key)
 end
 return zSetData
 `

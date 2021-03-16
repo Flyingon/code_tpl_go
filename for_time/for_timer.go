@@ -1,7 +1,7 @@
 package main
 
 import (
-	"../util"
+	"code_tpl_go/util"
 	"fmt"
 	"time"
 )

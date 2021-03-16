@@ -34,12 +34,13 @@ func (t *Task) ZPopMaxToZSet(ctx context.Context, srcKey, dstKey string) (interf
 	if err != nil {
 		return nil, err
 	}
-	result, err := redislua.ZPopMaxToZSet.Do(conn, srcKey, dstKey, 100, 20)
+	result, err := redislua.ZPopMaxToZSet.Do(conn, srcKey, dstKey, "score_map", 100, 20)
 	if err != nil {
 		return nil, err
 	}
+	fmt.Printf("res: %+v", result)
 	if result != nil {
-		fmt.Printf("res: %+v, type: %v", result, reflect.TypeOf(result))
+		fmt.Printf("res: %s, type: %v", result, reflect.TypeOf(result))
 	}
 	return nil, nil
 }

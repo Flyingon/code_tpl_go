@@ -14,6 +14,6 @@ func init() {
 	SPopToZSet = redigo.NewScript(2, LSSPopToZSet)
 	ZPopByScore = redigo.NewScript(1, LSZPopByScore)
 	ZPopMax = redigo.NewScript(1, LsZPopMax)
-	ZPopByScoreToZSet = redigo.NewScript(2, LSZPopByScoreToZSet)
-	ZPopMaxToZSet = redigo.NewScript(2, LSZPopMaxToZSet)
+	ZPopByScoreToZSet = redigo.NewScript(3, LSZPopByScoreToZSet)
+	ZPopMaxToZSet = redigo.NewScript(3, LSZPopMaxToZSet)
 }
