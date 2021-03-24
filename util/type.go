@@ -3,6 +3,7 @@ package util
 import (
 	"encoding/json"
 	"fmt"
+	"reflect"
 	"strconv"
 )
 
@@ -210,4 +211,11 @@ func IsEmptyValue(key interface{}) bool {
 		return key.(json.Number).String() == "0"
 	}
 	return false
+}
+
+// InterfaceCopy 结构体拷贝-注意: 传入结构体对象, 传指针只能复制地址，没有意义
+func InterfaceCopy(d interface{}) interface{} {
+	n := reflect.New(reflect.TypeOf(d))
+	n.Elem().Set(reflect.ValueOf(d))
+	return n.Interface()
 }
