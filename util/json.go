@@ -40,3 +40,42 @@ func ValueToStr(v interface{}) (ret string) {
 	}
 	return
 }
+
+// IsEmptyValue
+func IsEmptyValue(key interface{}) bool {
+	switch key.(type) {
+	case string:
+		return len(key.(string)) == 0
+	case int:
+		return key.(int) == 0
+	case int8:
+		return key.(int8) == 0
+	case int16:
+		return key.(int16) == 0
+	case int32:
+		return key.(int32) == 0
+	case int64:
+		return key.(int64) == 0
+	case uint:
+		return key.(uint) == 0
+	case uint8:
+		return key.(uint8) == 0
+	case uint16:
+		return key.(uint16) == 0
+	case uint32:
+		return key.(uint32) == 0
+	case uint64:
+		return key.(uint64) == 0
+	case float32:
+		return key.(float32) == 0
+	case float64:
+		return key.(float64) == 0
+	case bool:
+		return key.(bool) == false
+	case []byte:
+		return len(key.([]byte)) < 2
+	case json.Number:
+		return key.(json.Number).String() == "0"
+	}
+	return false
+}
