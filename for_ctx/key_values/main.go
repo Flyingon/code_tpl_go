@@ -3,14 +3,23 @@ package main
 import (
 	"context"
 	"fmt"
+	"time"
 )
 
 type strKey string
 const kkk strKey = "aaa"
 
+// Deadline不能重置，只能新建ctx
 func main() {
-	ctx := context.Background()
+	ctx, _ := context.WithTimeout(context.Background(), 3 * time.Second)
+	deadTime, _ := ctx.Deadline()
+	fmt.Printf("deadTime: %+v\n", deadTime)
 	nCtx := context.WithValue(ctx, kkk, "bbb")
-	ccc := nCtx.Value(kkk).(string)
+	deadTime, _ = nCtx.Deadline()
+	fmt.Printf("deadTime: %+v\n", deadTime)
+	nnCtx, _ := context.WithTimeout(nCtx, 5 * time.Second)
+	deadTime, _ = nnCtx.Deadline()
+	fmt.Printf("deadTime: %+v\n", deadTime)
+	ccc := nnCtx.Value(kkk).(string)
 	fmt.Println(ccc)
 }
