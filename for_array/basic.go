@@ -25,6 +25,8 @@ func addElem(array *[]string) {
 }
 
 func main() {
+	arrayCopy()
+
 	data := map[string]map[string]interface{}{
 		"1": {"a": "a"},
 		"2": {"b": "b"},

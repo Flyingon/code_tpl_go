@@ -37,6 +37,14 @@ func rangeSet() {
 	for _, e := range elemList {
 		fmt.Printf("%+v\n", e)
 	}
+	for i, _ := range elemList {
+		if i == 1 {
+			elemList[i].C = true
+		}
+	}
+	for _, e := range elemList {
+		fmt.Printf("%+v\n", e)
+	}
 }
 
 func main() {
