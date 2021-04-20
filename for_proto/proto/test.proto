@@ -1,8 +1,9 @@
 syntax = "proto3";
 package test;
 import "google/protobuf/struct.proto";
-
+import "google/protobuf/any.proto";
 message Result {
     google.protobuf.Struct JSON = 1;
     map<string, google.protobuf.Value> JSON2 = 2;
+    google.protobuf.Any Any = 3;
 }
