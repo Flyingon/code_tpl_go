@@ -16,6 +16,7 @@ require (
 	github.com/golang/protobuf v1.4.3
 	github.com/gomodule/redigo v2.0.0+incompatible
 	github.com/google/go-cmp v0.5.4
+	github.com/google/wire v0.5.0
 	github.com/gorilla/websocket v1.4.2
 	github.com/jmoiron/sqlx v1.3.1 // indirect
 	github.com/json-iterator/go v1.1.10
@@ -34,6 +35,9 @@ require (
 	github.com/siddontang/go v0.0.0-20180604090527-bdc77568d726
 	github.com/siddontang/go-log v0.0.0-20190221022429-1e957dd83bed
 	github.com/siddontang/go-mysql v1.1.0
+	github.com/stretchr/testify v1.7.0
+	github.com/tencentyun/cos-go-sdk-v5 v0.7.24
+	github.com/tencentyun/qcloud-cos-sts-sdk v0.0.0-20210401071353-f07ddd2579e5
 	github.com/xdg/scram v0.0.0-20180814205039-7eeb5667e42c
 	go.uber.org/automaxprocs v1.4.0
 	go.uber.org/zap v1.14.1 // indirect
