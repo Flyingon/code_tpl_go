@@ -6,18 +6,22 @@ import (
 	"time"
 )
 
-func main() {
-	cronSpec := "0 */1 * * * ?"
-	//timeLayout := "2006-01-02_15:04:05"
+var timeLayout = "2006-01-02_15:04:05"
 
-	sch, _:= cron.Parse(cronSpec)
+func main() {
+	//cronSpec := "0 */1 * * * *"
+	cronSpec := "0 20 * * * *"
+
+	sch, _ := cron.Parse(cronSpec)
 	fmt.Println(time.Now())
 	fmt.Println(sch.Next(time.Now()))
-	//_ = c.AddFunc(cronSpec, func() {
-	//	fmt.Print("now: ", time.Now().Format(timeLayout))
-	//	fmt.Printf("\nc.Entries()[0].Prev:%s\nc.Entries()[0].Next:%s",
-	//		c.Entries()[0].Prev.Format(timeLayout), c.Entries()[0].Next.Format(timeLayout))
-	//})
-	//c.Start()
 
+	ct := cron.New()
+	_ = ct.AddFunc(cronSpec, func() {
+		fmt.Print("now: ", time.Now().Format(timeLayout))
+		fmt.Printf("\nc.Entries()[0].Prev:%s\nc.Entries()[0].Next:%s",
+			ct.Entries()[0].Prev.Format(timeLayout), ct.Entries()[0].Next.Format(timeLayout))
+	})
+	ct.Start()
+	<-time.After(1000 * time.Second)
 }
