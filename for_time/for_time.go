@@ -174,6 +174,20 @@ func GetDeltaDayTs(curTs int64, delta int) (tsStart, tsEnd int64, err error) {
 	return
 }
 
+// GetDeltaWeekZeroTs 获取n周前0点时间戳
+func GetDeltaWeekZeroTs(delta int) (ret int64) {
+	now := time.Now()
+
+	offset := int(time.Monday - now.Weekday())
+	if offset > 0 {
+		offset = -6
+	}
+	offset = offset - delta*7
+	fmt.Println("offset: ", offset)
+	weekStart := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, time.Local).AddDate(0, 0, offset).Unix()
+	return weekStart
+}
+
 func main() {
 	//fmt.Println("today begin: ", GetTodayBegin())
 	//fmt.Println("ts time: ", GetTimeFormat(1558430118))
@@ -200,8 +214,8 @@ func main() {
 
 	//ret, e := checkNowInRange("2020-07-01T16:00:00.000Z", "2020-07-01T16:00:00.000Z", "2006-01-02T15:04:05.000Z")
 	//fmt.Println(ret, e)
-	begin, end, _:= GetDeltaDayTs(time.Now().Unix(), -1)
-	fmt.Println((end-1-begin) / 86400)
+	//begin, end, _ := GetDeltaDayTs(time.Now().Unix(), -1)
+	//fmt.Println((end - 1 - begin) / 86400)
 	//now := time.Now()
 	//offset := int(time.Monday - now.Weekday())
 	//if offset > 0 {
@@ -212,4 +226,5 @@ func main() {
 	//	fmt.Println(t.Format("20060102"))
 	//}
 	//for t := time.Monday; time.Now().Sub(t) < 0; t
+	fmt.Println(GetDeltaWeekZeroTs(1))
 }
