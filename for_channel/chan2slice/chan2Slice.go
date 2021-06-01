@@ -7,8 +7,8 @@ import (
 
 // 循环读取channel，取地址append到数组
 type ChanStruct struct {
-	Num  int
-	Data string
+	Num    int
+	Data   string
 	NumPtr *int
 }
 
@@ -17,10 +17,10 @@ func chan2SliceNotOK() {
 	// 定义chan
 	ptrChan := make(chan ChanStruct, 10)
 	for i := 1; i < 10; i++ {
-		num := i  // 注意，for循环取地址，都要新建变量，分配内存，否则i的地址都不会变，最后值只有最后一个
+		num := i // 注意，for循环取地址，都要新建变量，分配内存，否则i的地址都不会变，最后值只有最后一个
 		cs := ChanStruct{
-			Num:  i,
-			Data: strconv.Itoa(i),
+			Num:    i,
+			Data:   strconv.Itoa(i),
 			NumPtr: &num,
 		}
 		ptrChan <- cs
@@ -36,8 +36,32 @@ func chan2SliceNotOK() {
 	for _, cs := range csList {
 		fmt.Printf("cs: %p, %d, %s\n", cs, cs.Num, cs.Data)
 	}
+	fmt.Println("----------------------------------")
 	for _, numPtr := range NumPtrList {
 		fmt.Printf("cs: %p, %d\n", numPtr, *numPtr)
+	}
+}
+
+// 新数组地址不同，符合预期
+func chan2SliceOK2() {
+	// 定义chan
+	ptrChan := make(chan *ChanStruct, 10)
+	for i := 1; i < 10; i++ {
+		cs := ChanStruct{
+			Num:  i,
+			Data: strconv.Itoa(i),
+		}
+		ptrChan <- &cs
+	}
+	close(ptrChan)
+	var csList []*ChanStruct
+	// 从chan取数据，放入csList中
+	for c := range ptrChan {
+		csList = append(csList, c)
+	}
+	for _, cs := range csList {
+
+		fmt.Printf("cs: %p, %d, %s\n", cs, cs.Num, cs.Data)
 	}
 }
 
@@ -67,5 +91,8 @@ func chan2SliceOK() {
 
 func main() {
 	chan2SliceNotOK()
+	fmt.Println("----------------------------------------------------------------------------------")
 	chan2SliceOK()
+	fmt.Println("----------------------------------------------------------------------------------")
+	chan2SliceOK2()
 }

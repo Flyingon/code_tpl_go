@@ -14,11 +14,13 @@ require (
 	github.com/bsm/sarama-cluster v2.1.15+incompatible
 	github.com/buger/jsonparser v1.1.1
 	github.com/go-mysql-org/go-mysql v1.2.0 // indirect
+	github.com/gogf/gf v1.16.1
 	github.com/golang/mock v1.5.0
 	github.com/golang/protobuf v1.5.2
 	github.com/gomodule/redigo v2.0.0+incompatible
 	github.com/google/go-cmp v0.5.5
 	github.com/google/wire v0.5.0
+	github.com/googollee/go-socket.io v1.6.0
 	github.com/gorilla/websocket v1.4.2
 	github.com/json-iterator/go v1.1.11
 	github.com/mailru/easyjson v0.7.7 // indirect
@@ -31,6 +33,8 @@ require (
 	github.com/siddontang/go-log v0.0.0-20190221022429-1e957dd83bed
 	github.com/siddontang/go-mysql v0.0.0-00010101000000-000000000000
 	github.com/stretchr/testify v1.7.0
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.173
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/ims v0.0.0-20210531003256-78c3f12c3f55
 	github.com/tencentyun/cos-go-sdk-v5 v0.7.25
 	github.com/tencentyun/qcloud-cos-sts-sdk v0.0.0-20210423052248-426e211898a0
 	github.com/xdg/scram v1.0.3
