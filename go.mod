@@ -13,33 +13,26 @@ require (
 	github.com/astaxie/beego v1.12.3
 	github.com/bsm/sarama-cluster v2.1.15+incompatible
 	github.com/buger/jsonparser v1.1.1
-	github.com/gin-gonic/gin v1.7.2 // indirect
+	github.com/fsnotify/fsnotify v1.4.9 // indirect
 	github.com/go-mysql-org/go-mysql v1.2.0 // indirect
-	github.com/gogf/gf v1.16.1
 	github.com/golang/mock v1.5.0
 	github.com/golang/protobuf v1.5.2
 	github.com/gomodule/redigo v2.0.0+incompatible
 	github.com/google/go-cmp v0.5.5
 	github.com/google/wire v0.5.0
 	github.com/googollee/go-socket.io v1.6.0
-	github.com/gorilla/handlers v1.5.1 // indirect
 	github.com/gorilla/websocket v1.4.2
 	github.com/json-iterator/go v1.1.11
 	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/mitchellh/mapstructure v1.4.1
 	github.com/olivere/elastic v6.2.35+incompatible // indirect
 	github.com/robfig/cron v1.2.0
-	github.com/rs/cors v1.7.0 // indirect
 	github.com/satori/go.uuid v1.2.0
 	github.com/shopspring/decimal v1.2.0
 	github.com/siddontang/go v0.0.0-20180604090527-bdc77568d726
 	github.com/siddontang/go-log v0.0.0-20190221022429-1e957dd83bed
 	github.com/siddontang/go-mysql v0.0.0-00010101000000-000000000000
 	github.com/stretchr/testify v1.7.0
-	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.173
-	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/ims v0.0.0-20210531003256-78c3f12c3f55
-	github.com/tencentyun/cos-go-sdk-v5 v0.7.25
-	github.com/tencentyun/qcloud-cos-sts-sdk v0.0.0-20210423052248-426e211898a0
 	github.com/xdg/scram v1.0.3
 	go.uber.org/automaxprocs v1.4.0
 	golang.org/x/net v0.0.0-20210510120150-4163338589ed
