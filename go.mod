@@ -33,6 +33,10 @@ require (
 	github.com/siddontang/go-log v0.0.0-20190221022429-1e957dd83bed
 	github.com/siddontang/go-mysql v0.0.0-00010101000000-000000000000
 	github.com/stretchr/testify v1.7.0
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.173
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/ims v0.0.0-20210609005011-d5c8b6048211
+	github.com/tencentyun/cos-go-sdk-v5 v0.7.25
+	github.com/tencentyun/qcloud-cos-sts-sdk v0.0.0-20210601063555-b0ef43159af8
 	github.com/xdg/scram v1.0.3
 	go.uber.org/automaxprocs v1.4.0
 	golang.org/x/net v0.0.0-20210510120150-4163338589ed
