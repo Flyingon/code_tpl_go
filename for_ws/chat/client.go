@@ -6,6 +6,7 @@ package main
 
 import (
 	"bytes"
+	"fmt"
 	"log"
 	"net/http"
 	"time"
@@ -133,6 +134,16 @@ func serveWs(hub *Hub, w http.ResponseWriter, r *http.Request) {
 	}
 	client := &Client{hub: hub, conn: conn, send: make(chan []byte, 256)}
 	client.hub.register <- client
+
+	fmt.Println("send1:", client.conn.WriteJSON("Are you OK1"))
+	go func() {
+		time.Sleep(5 * time.Second)
+		//fmt.Println("send2:", client.conn.WriteJSON("Are you OK2"))
+		//fmt.Println("send3:", client.conn.WriteJSON("Are you OK3"))
+		client.send <- []byte("Are you OK2")
+		client.send <- []byte("Are you OK3")
+		fmt.Println("close: ", client.conn.Close())
+	}()
 
 	// Allow collection of memory referenced by the caller by doing all work in
 	// new goroutines.

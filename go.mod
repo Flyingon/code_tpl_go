@@ -8,6 +8,7 @@ replace github.com/siddontang/go-mysql => github.com/go-mysql-org/go-mysql v1.1.
 
 require (
 	github.com/BurntSushi/toml v0.3.1
+	github.com/Flyingon/go-common v0.1.7
 	github.com/Knetic/govaluate v3.0.0+incompatible
 	github.com/Shopify/sarama v1.29.0
 	github.com/astaxie/beego v1.12.3
@@ -37,6 +38,7 @@ require (
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/ims v0.0.0-20210609005011-d5c8b6048211
 	github.com/tencentyun/cos-go-sdk-v5 v0.7.25
 	github.com/tencentyun/qcloud-cos-sts-sdk v0.0.0-20210601063555-b0ef43159af8
+	github.com/valyala/fasthttp v1.27.0 // indirect
 	github.com/xdg/scram v1.0.3
 	go.uber.org/automaxprocs v1.4.0
 	golang.org/x/net v0.0.0-20210510120150-4163338589ed

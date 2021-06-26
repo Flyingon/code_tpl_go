@@ -10,8 +10,7 @@ var timeLayout = "2006-01-02_15:04:05"
 
 func main() {
 	//cronSpec := "0 */1 * * * *"
-	cronSpec := "0 20 * * * *"
-
+	cronSpec := "*/5 * * * * *"
 	sch, _ := cron.Parse(cronSpec)
 	fmt.Println(time.Now())
 	fmt.Println(sch.Next(time.Now()))
