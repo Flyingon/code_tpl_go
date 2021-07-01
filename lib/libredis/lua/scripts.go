@@ -138,3 +138,23 @@ for i=1,#zSetData,2 do
 end
 return zSetData
 `
+
+// LuaScriptSeqSetAndIncr 设置流水号并incr数据
+var LuaScriptSeqSetAndIncr = `
+local seqKey = KEYS[1]
+local incrKey = KEYS[2]
+local seqField = ARGV[1]
+local seqVal = ARGV[2]
+local incrField = ARGV[3]
+local incrVal = tonumber(ARGV[4])
+
+local rspSeq = redis.call('HSET', seqKey, seqField, seqVal)
+
+if rspSeq ~= 1
+then
+  return -1
+end
+
+local rspIncr = redis.call('HINCRBY', incrKey, incrField, incrVal)
+return rspIncr
+`
