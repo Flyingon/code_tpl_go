@@ -22,9 +22,11 @@ func NewPool(server, password string) *redigo.Pool {
 			if err != nil {
 				return nil, err
 			}
-			if _, err := c.Do("AUTH", password); err != nil {
-				c.Close()
-				return nil, err
+			if len(password) > 0 {
+				if _, err := c.Do("AUTH", password); err != nil {
+					c.Close()
+					return nil, err
+				}
 			}
 			return c, err
 		},

@@ -18,6 +18,7 @@ func (t *Task) ZPopByScoreToZSet(ctx context.Context, srcKey, dstKey string) (in
 	if err != nil {
 		return nil, err
 	}
+	defer conn.Close()
 	result, err := redislua.ZPopByScoreToZSet.Do(conn, srcKey, dstKey, "-INF", "+INF", "desc", 10)
 	if err != nil {
 		return nil, err
@@ -33,6 +34,7 @@ func (t *Task) ZPopMaxToZSet(ctx context.Context, srcKey, dstKey string) (interf
 	if err != nil {
 		return nil, err
 	}
+	defer conn.Close()
 	result, err := redislua.ZPopMaxToZSet.Do(conn, srcKey, dstKey, "score_map", 100, 20)
 	if err != nil {
 		return nil, err
@@ -44,12 +46,13 @@ func (t *Task) ZPopMaxToZSet(ctx context.Context, srcKey, dstKey string) (interf
 	return nil, nil
 }
 
-func (t *Task) SeqSetAndIncr(ctx context.Context, seqKey, incrKey, seqField, incrField string, seqVal, incrVal int64) (interface{}, error) {
+func (t *Task) SeqSetAndIncr(ctx context.Context, seqKey, incrKey, seqField string, seqVal int64, incrField string, incrVal int64) (interface{}, error) {
 	conn, err := t.RedisPool.GetContext(ctx)
 	if err != nil {
 		return nil, err
 	}
-	result, err := redislua.SeqSetAndIncr.Do(conn, seqKey, incrKey, seqField, incrField, seqVal, incrVal)
+	defer conn.Close()
+	result, err := redislua.SeqSetAndIncr.Do(conn, seqKey, incrKey, seqField, seqVal, incrField, incrVal)
 	if err != nil {
 		return nil, err
 	}
@@ -64,9 +67,9 @@ func main() {
 	task := Task{
 		RedisPool: redis.NewPool("127.0.0.1:6379", ""),
 	}
-	seq := "1234"
+	seq := "1236"
 	fmt.Println(task.SeqSetAndIncr(context.Background(), "seq_key", "incr_key", seq,
-		"incr_field", 100, 2))
+		100, "incr_field", 2))
 	/* 任务调度测试
 	fmt.Println("begin loop")
 	for true {

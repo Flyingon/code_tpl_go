@@ -11,7 +11,7 @@ func main() {
 	data := util.InterfaceToString(oriData)
 	fmt.Println(data, reflect.TypeOf(data))
 
-	for _, testStr := range []string {"1", "2", "0"} {
+	for _, testStr := range []string{"1", "2", "0", "1626872874"} {
 		fmt.Println(util.InterfaceToInt(testStr))
 	}
 }

@@ -10,6 +10,8 @@ var ZPopByScore *redigo.Script
 var ZPopByScoreToZSet *redigo.Script
 var ZPopMaxToZSet *redigo.Script
 var SeqSetAndIncr *redigo.Script
+var HGetAndHDel *redigo.Script
+var HCheckAndSet *redigo.Script
 
 func init() {
 	SPopToZSet = redigo.NewScript(2, LSSPopToZSet)
@@ -18,4 +20,6 @@ func init() {
 	ZPopByScoreToZSet = redigo.NewScript(3, LSZPopByScoreToZSet)
 	ZPopMaxToZSet = redigo.NewScript(3, LSZPopMaxToZSet)
 	SeqSetAndIncr = redigo.NewScript(2, LuaScriptSeqSetAndIncr)
+	HGetAndHDel = redigo.NewScript(1, LuaScriptHGetAndHDel)
+	HCheckAndSet = redigo.NewScript(2, LuaScriptHCheckAndSet)
 }

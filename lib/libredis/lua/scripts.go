@@ -158,3 +158,40 @@ end
 local rspIncr = redis.call('HINCRBY', incrKey, incrField, incrVal)
 return rspIncr
 `
+
+// LuaScriptHGetAndHDel hget获取数据并hdel删除
+var LuaScriptHGetAndHDel = `
+local rdKey = KEYS[1]
+local field = ARGV[1]
+
+local rspData = redis.call('HGET', rdKey, field)
+
+redis.call('HDEL', rdKey, field)
+return rspData
+`
+
+// LuaScriptHCheckAndSet hset field检查并设置值
+var LuaScriptHCheckAndSet = `
+local seqKey = KEYS[1]
+local userKey = KEYS[2]
+local seqField = ARGV[1]
+local seqVal = ARGV[2]
+local acctField = ARGV[3]
+local cmpVal = tonumber(ARGV[4])
+local newVal = tonumber(ARGV[5])
+
+local balance = redis.call('HGET', userKey, acctField)
+if balance ~= cmpVal
+then 
+	return -2
+end
+
+local rspSeq = redis.call('HSET', seqKey, seqField, seqVal)
+if rspSeq ~= 1
+then
+  return -1
+end
+
+local rspSet = redis.call('HSET', userKey, acctField, newVal)
+return rspSet
+`
