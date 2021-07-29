@@ -13,9 +13,9 @@ func DivideFloat(d1, d2 float64) float64 {
 	return float64Result
 }
 
-// roundFloat64 浮点类型保留小数点后n位精度
-func RoundFloat64(v float64, n int) (r float64, err error) {
+// RoundFloat64 浮点类型保留小数点后n位精度
+func RoundFloat64(v float64, n int) (r float64) {
 	pow10N := math.Pow10(n)
 	r = math.Trunc((v+0.5/pow10N)*pow10N) / pow10N
-	return r, err
+	return r
 }

@@ -9,13 +9,18 @@ import (
 	"time"
 )
 
+// RedisFLow ...
+type RedisFLow struct {
+	RedisPool *redigo.Pool
+}
+
 func (r *RedisFLow) HCheckAndSet(ctx context.Context, key, field string) (interface{}, error) {
 	conn, err := r.RedisPool.GetContext(ctx)
 	if err != nil {
 		return nil, err
 	}
 	defer conn.Close()
-	result, err := redislua.LuaScriptHCheckAndSet.Do(conn, key, field)
+	result, err := redislua.HCheckAndSet.Do(conn, key, field)
 	if err != nil {
 		return nil, err
 	}
