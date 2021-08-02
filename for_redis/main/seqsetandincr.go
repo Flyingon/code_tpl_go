@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 	redigo "github.com/gomodule/redigo/redis"
+	"math"
 	"reflect"
 	"time"
 )
@@ -32,7 +33,7 @@ func (r *Flow2) SeqSetAndIncr(ctx context.Context, seqKey, incrKey, seqField str
 	return nil, nil
 }
 
-func (r *Flow2) SeqSetAndIncrFloat(ctx context.Context, seqKey, incrKey, seqField string, seqVal int64, incrField string, incrVal float64) (interface{}, error) {
+func (r *Flow2) SeqSetAndIncrFloat(ctx context.Context, seqKey, incrKey, seqField, seqVal string, incrField string, incrVal float64) (interface{}, error) {
 	conn, err := r.RedisPool.GetContext(ctx)
 	if err != nil {
 		return nil, err
@@ -55,11 +56,13 @@ func main() {
 	flow := Flow2{
 		RedisPool: redis.NewPool("127.0.0.1:6379", ""),
 	}
+	val := 3.1415926
 	seq := fmt.Sprintf("test-%d", time.Now().Unix())
+	seqVal := fmt.Sprintf("%0.2f", val)
 	for i := 0; i < 1000; i++ {
 		go func() {
 			fmt.Println(flow.SeqSetAndIncrFloat(context.Background(), "seq_key", "incr_key", seq,
-				100, "float_field", 2.43))
+				seqVal, "float_field", math.Floor(val*100)/100))
 		}()
 	}
 	<-time.After(3 * 60 * time.Second)

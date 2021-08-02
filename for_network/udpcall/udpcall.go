@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net"
 )
@@ -88,40 +87,6 @@ func (u *UDPCallOpts) UDPCall(ctx context.Context, reqData []byte) ([]byte, erro
 	return recvData[:num], nil
 }
 
-func callUic(text string) {
-	udpOpts := UDPCallOpts{
-		Addr:          "100.117.37.58:20001",
-		ConnectedMode: false,
-		NetWork:       "udp",
-		SendOnly:      false,
-	}
-	reqMap := make(map[string]interface{})
-	reqHead := map[string]interface{}{
-		"account_":       "",
-		"game_id_":       2264,
-		"plat_id_":       0,
-		"world_":         0,
-		"busi_passwd_":   "ODKEg21cMRNGnIfi6y39",
-		"cmd_":           2,
-		"callback_data_": "",
-		"err_code_":      0,
-		"err_msg_":       "",
-	}
-	reqBody := map[string]map[string]interface{}{
-		"text_pkg_": {
-			"text_category_": 5,
-			"text_":          text,
-			"get_sens_words": 1,
-		},
-	}
-	reqMap["head_"] = reqHead
-	reqMap["body_"] = reqBody
-
-	reqJson, _ := json.Marshal(reqMap)
-	rsp, err := udpOpts.UDPCall(context.Background(), reqJson)
-	fmt.Printf("uic call rsp: %s, err: %v\n", rsp, err)
-}
-
 func main() {
-	callUic("习近平，跑步")
+
 }
