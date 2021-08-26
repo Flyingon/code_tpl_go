@@ -8,6 +8,7 @@ import (
 	"bytes"
 	"fmt"
 	"log"
+	"net"
 	"net/http"
 	"time"
 
@@ -142,8 +143,11 @@ func serveWs(hub *Hub, w http.ResponseWriter, r *http.Request) {
 		//fmt.Println("send3:", client.conn.WriteJSON("Are you OK3"))
 		client.send <- []byte("Are you OK2")
 		client.send <- []byte("Are you OK3")
-		fmt.Println("close: ", client.conn.Close())
+		//fmt.Println("close: ", client.conn.Close())
 	}()
+	fmt.Printf("remoteAddr: %s\n", client.conn.RemoteAddr().String())
+	file, e := client.conn.UnderlyingConn().(*net.TCPConn).File()
+	fmt.Printf("fd: %v, e: %v", file.Fd(), e)
 
 	// Allow collection of memory referenced by the caller by doing all work in
 	// new goroutines.
