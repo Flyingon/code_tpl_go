@@ -26,6 +26,7 @@ require (
 	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/mitchellh/mapstructure v1.4.1
 	github.com/olivere/elastic v6.2.35+incompatible // indirect
+	github.com/pkg/errors v0.9.1
 	github.com/robfig/cron v1.2.0
 	github.com/satori/go.uuid v1.2.0
 	github.com/shopspring/decimal v1.2.0

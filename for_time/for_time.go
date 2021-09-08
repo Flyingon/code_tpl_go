@@ -6,44 +6,44 @@ import (
 	"time"
 )
 
-// 返回当前时间格式
+// GetDateTime 返回当前时间格式
 func GetDateTime() string {
 	return time.Now().Local().Format("2006-01-02 15:04:05")
 }
 
-// 格式化传入的时间
+// GetTimeFormat 格式化传入的时间
 func GetTimeFormat(t int64) string {
 	return time.Unix(t, 0).Format("2006-01-02 15:04:05")
 }
 
-// 获取今天的零点时间
+// GetTodayBegin 获取今天的零点时间
 func GetTodayBegin() int64 {
 	timeStr := time.Now().Format("2006-01-02")
 	t, _ := time.ParseInLocation("2006-01-02 15:04:05", timeStr+" 00:00:00", time.Local)
 	return t.Unix()
 }
 
-// 获取今天的最后结束时间
+// GetTodayEnd 获取今天的最后结束时间
 func GetTodayEnd() int64 {
 	timeStr := time.Now().Format("2006-01-02")
 	t, _ := time.ParseInLocation("2006-01-02 15:04:05", timeStr+" 23:59:59", time.Local)
 	return t.Unix()
 }
 
-// 获取ts当天时间零点时间戳
+// GetTsBegin 获取ts当天时间零点时间戳
 func GetTsBegin(ts int64) int64 {
 	timeStr := time.Unix(ts, 0).Format("2006-01-02")
 	t, _ := time.ParseInLocation("2006-01-02 15:04:05", timeStr+" 00:00:00", time.Local)
 	return t.Unix()
 }
 
-// 获取time当天时间零点
+// GetTimeBegin 获取time当天时间零点
 func GetTimeBegin(t time.Time) time.Time {
 	startTime := time.Date(t.Year(), t.Month(), t.Day(), 0, 0, 0, 0, t.Location())
 	return startTime
 }
 
-// 获取ts当天时间23:59:59
+// GetTimeEnd 获取ts当天时间23:59:59
 func GetTimeEnd(t time.Time) time.Time {
 	endTime := time.Date(t.Year(), t.Month(), t.Day(), 23, 59, 59, 0, t.Location())
 	return endTime
@@ -85,7 +85,7 @@ func GetAfterTimeMaxHour(timeStr string) (time.Time, error) {
 	return nowTime.Add(d), nil
 }
 
-// GetBeforeTs 获取n天后的时间
+// GetAfterTime 获取n天后的时间
 func GetAfterTime(timeStr string) (time.Time, error) {
 	nowTime := time.Now()
 	numStr := timeStr[:len(timeStr)-1]
