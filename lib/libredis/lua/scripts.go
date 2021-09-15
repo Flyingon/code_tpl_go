@@ -215,3 +215,74 @@ end
 local rspSet = redis.call('HSET', userKey, acctField, newVal)
 return rspSet
 `
+
+var LuaScriptCheckAndZadd = `
+local uidKey = KEYS[1]
+local newUid = ARGV[1]
+
+local rankKey = KEYS[2]
+local member = ARGV[2]
+local score = ARGV[3]
+
+local oldUid = redis.call('GET', uidKey)
+if (oldUid == false) or (tonumber(newUid) > tonumber(oldUid))
+then
+  local r1 = redis.call('ZADD', rankKey, score, member)
+  local r2 = redis.call('SETEX', uidKey, 3*24*3600, newUid)
+
+  local r22 = ""
+  for k, v in pairs(r2) do
+	r22 = r22..tostring(k)
+    r22 = r22..tostring(v)
+  end
+
+  return {uidKey, newUid, tostring(oldUid), tostring(r1), tostring(r22)}
+else
+  return {"-2", oldUid}
+end
+return {"-1"}
+`
+
+// LuaScriptSeqSetAndIncrV2 设置流水号并hincr数据v2
+var LuaScriptSeqSetAndIncrV2 = `
+local seqKey = KEYS[1]
+local incrKey = KEYS[2]
+local versionKey = KEYS[3]
+local seqField = ARGV[1]
+local seqVal = ARGV[2]
+local incrField = ARGV[3]
+local incrVal = tonumber(ARGV[4])
+
+local rspSeq = redis.call('HSET', seqKey, seqField, seqVal)
+
+if rspSeq ~= 1
+then
+  return {-1, 0}
+end
+
+local rspIncr = redis.call('HINCRBY', incrKey, incrField, incrVal)
+local rspVersion = redis.call('INCRBY', versionKey, 1)
+return {rspIncr, rspVersion}
+`
+
+// LuaScriptSeqSetAndIncrFloatV2 设置流水号并hincr float数据v2
+var LuaScriptSeqSetAndIncrFloatV2 = `
+local seqKey = KEYS[1]
+local incrKey = KEYS[2]
+local versionKey = KEYS[3]
+local seqField = ARGV[1]
+local seqVal = ARGV[2]
+local incrField = ARGV[3]
+local incrVal = tonumber(ARGV[4])
+
+local rspSeq = redis.call('HSET', seqKey, seqField, seqVal)
+
+if rspSeq ~= 1
+then
+  return {"-1", "0"}
+end
+
+local rspIncr = redis.call('HINCRBYFLOAT', incrKey, incrField, incrVal)
+local rspVersion = redis.call('INCRBY', versionKey, 1)
+return {rspIncr, tostring(rspVersion)}
+`
