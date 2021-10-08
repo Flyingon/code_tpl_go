@@ -29,7 +29,7 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/robfig/cron v1.2.0
 	github.com/satori/go.uuid v1.2.0
-	github.com/shopspring/decimal v1.2.0
+	github.com/shopspring/decimal v1.2.0 // indirect
 	github.com/siddontang/go v0.0.0-20180604090527-bdc77568d726
 	github.com/siddontang/go-log v0.0.0-20190221022429-1e957dd83bed
 	github.com/siddontang/go-mysql v0.0.0-00010101000000-000000000000
@@ -42,5 +42,7 @@ require (
 	golang.org/x/time v0.0.0-20210220033141-f8bda1e9f3ba
 	google.golang.org/protobuf v1.26.0
 	gopkg.in/olivere/elastic.v6 v6.2.35
+	gorm.io/driver/mysql v1.1.2
+	gorm.io/gorm v1.21.15
 	honnef.co/go/tools v0.0.1-2020.1.4 // indirect
 )

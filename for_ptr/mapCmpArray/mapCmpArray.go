@@ -31,4 +31,8 @@ func main() {
 
 	updateArrayPtr(&data, 0)
 	fmt.Println("data: ", data)
+
+	dst := make([]int, 3)
+	copy(dst, data[3:5]) // 不能给切片copy
+	fmt.Println("data: ", data)
 }
