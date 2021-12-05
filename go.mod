@@ -8,8 +8,10 @@ replace github.com/siddontang/go-mysql => github.com/go-mysql-org/go-mysql v1.1.
 
 require (
 	github.com/BurntSushi/toml v0.3.1
+	github.com/Flyingon/go-common v0.1.8
 	github.com/Knetic/govaluate v3.0.0+incompatible
 	github.com/Shopify/sarama v1.29.0
+	github.com/armon/go-socks5 v0.0.0-20160902184237-e75332964ef5
 	github.com/astaxie/beego v1.12.3
 	github.com/bsm/sarama-cluster v2.1.15+incompatible
 	github.com/buger/jsonparser v1.1.1
@@ -30,7 +32,6 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/robfig/cron v1.2.0
 	github.com/satori/go.uuid v1.2.0
-	github.com/shopspring/decimal v1.2.0 // indirect
 	github.com/siddontang/go v0.0.0-20180604090527-bdc77568d726
 	github.com/siddontang/go-log v0.0.0-20190221022429-1e957dd83bed
 	github.com/siddontang/go-mysql v0.0.0-00010101000000-000000000000

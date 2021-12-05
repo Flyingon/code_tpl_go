@@ -16,6 +16,7 @@ var SeqSetAndIncrFloatV2 *redigo.Script
 var HGetAndHDel *redigo.Script
 var HCheckAndSet *redigo.Script
 var CheckAndZAdd *redigo.Script
+var HIncrAndZAdd *redigo.Script
 
 func init() {
 	SPopToZSet = redigo.NewScript(2, LSSPopToZSet)
@@ -30,4 +31,5 @@ func init() {
 	HGetAndHDel = redigo.NewScript(1, LuaScriptHGetAndHDel)
 	HCheckAndSet = redigo.NewScript(2, LuaScriptHCheckAndSet)
 	CheckAndZAdd = redigo.NewScript(2, LuaScriptCheckAndZadd)
+	HIncrAndZAdd = redigo.NewScript(2, LuaScriptHIncrAndZAdd)
 }

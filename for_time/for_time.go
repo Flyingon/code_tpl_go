@@ -188,6 +188,28 @@ func GetDeltaWeekZeroTs(delta int) (ret int64) {
 	return weekStart
 }
 
+// GetMonthTs 获取指定月份开始和结束的时间戳
+func GetMonthTs(year, month int) (start, end int64) {
+	if month < 1 || month > 12 {
+		return 0, 0
+	}
+
+	start = time.Date(year, time.Month(month), 1, 0, 0, 0, 0, time.Local).Unix()
+
+	NextMonth := month + 1
+	if NextMonth > 12 {
+		NextMonth = 1
+		year = year + 1
+	}
+	end = time.Date(year, time.Month(NextMonth), 1, 0, 0, 0, 0, time.Local).Unix()
+	return start, end
+}
+
+func GetYearMonthByTs(ts int64) (year, month int) {
+	t := time.Unix(ts, 0)
+	return t.Year(), int(t.Month())
+}
+
 func main() {
 	//fmt.Println("today begin: ", GetTodayBegin())
 	//fmt.Println("ts time: ", GetTimeFormat(1558430118))
@@ -227,4 +249,5 @@ func main() {
 	//}
 	//for t := time.Monday; time.Now().Sub(t) < 0; t
 	fmt.Println(GetDeltaWeekZeroTs(1))
+	fmt.Println(GetYearMonthByTs(1635696000))
 }

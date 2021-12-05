@@ -2,10 +2,10 @@ package timer
 
 import (
 	redislua "code_tpl_go/lib/libredis/lua"
-	"code_tpl_go/util"
 	"context"
 	"errors"
 	"fmt"
+	"github.com/Flyingon/go-common/util"
 	redigo "github.com/gomodule/redigo/redis"
 	"github.com/siddontang/go-log/log"
 )
@@ -43,7 +43,7 @@ func TaskPopMax(ctx context.Context, redisPool *redigo.Pool, queueName string, n
 		return nil, err
 	}
 	defer conn.Close()
-	result, err := redislua.ZPOPMAX.Do(conn, queueName, num)
+	result, err := redislua.ZPopMax.Do(conn, queueName, num)
 	//TODO:这里忽略了score顺序
 	return result2elements(result, err, "ZPOPMAX")
 }

@@ -286,3 +286,22 @@ local rspIncr = redis.call('HINCRBYFLOAT', incrKey, incrField, incrVal)
 local rspVersion = redis.call('INCRBY', versionKey, 1)
 return {rspIncr, tostring(rspVersion)}
 `
+
+// LuaScriptHIncrAndZAdd 设置订单状态并更新流水
+var LuaScriptHIncrAndZAdd = `
+local incrKey = KEYS[1]
+local flowKey = KEYS[2]
+local field = ARGV[1]
+local flowVal = ARGV[2]
+local ts=redis.call('TIME')[1]
+
+local rspIncr = redis.call('HINCRBY', incrKey, field, 1)
+
+if rspIncr ~= 1
+then
+  return -1
+end
+
+redis.call('ZADD', flowKey, ts, flowVal)
+return rspIncr
+`
