@@ -1,7 +1,6 @@
 package main
 
 import (
-	"code_tpl_go/util"
 	"fmt"
 	"time"
 )
@@ -12,12 +11,22 @@ func PrintTime(argc interface{}) {
 	return
 }
 
-
+func useTicker() {
+	ticker := time.NewTicker(1 * time.Second)
+	defer ticker.Stop()
+	ticks := 0
+	for {
+		select {
+		case <-ticker.C:
+			fmt.Println("t1定时器: ", ticks)
+			ticks ++
+			if ticks == 10 {
+				return
+			}
+		}
+	}
+}
 
 func main() {
-	//util.StartSecondTimer(2, PrintTime, nil)
-	//<-time.After(60 * time.Second)
-	for i:=0; i < 100; i ++ {
-		fmt.Println(util.GetRandomMilliSecDuration())
-	}
+	useTicker()
 }
