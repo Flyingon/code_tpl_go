@@ -201,7 +201,7 @@ func isResListValid(resLis []interface{}) bool {
 
 func testPipeLineOri() {
 	p := Pool{
-		redisPool: redis.NewPool("ssd1.userarchive.xytlsq.db:50001", "WOvoNlifCbCTZgpb"),
+		redisPool: redis.NewPool("", ""),
 	}
 	cmdList := []*SingleCmd{
 		{
@@ -225,7 +225,7 @@ func testPipeLineOri() {
 
 func testPipeLine() {
 	p := Pool{
-		redisPool: redis.NewPool("ssd1.userarchive.xytlsq.db:50001", "WOvoNlifCbCTZgpb"),
+		redisPool: redis.NewPool("127.0.0.1:6379", ""),
 	}
 	params := []map[string]interface{}{
 		{

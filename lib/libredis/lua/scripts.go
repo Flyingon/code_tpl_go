@@ -305,3 +305,47 @@ end
 redis.call('ZADD', flowKey, ts, flowVal)
 return rspIncr
 `
+
+// luaScriptSeqSetAndZIncr 设置流水号并zincr数
+var luaScriptSeqSetAndZIncr = `
+local seqKey = KEYS[1]
+local incrKey = KEYS[2]
+local incrKey2 = KEYS[3]
+local seqField = ARGV[1]
+local seqVal = ARGV[2]
+local incrField = ARGV[3]
+local incrVal = tonumber(ARGV[4])
+
+local rspSeq = redis.call('ZADD', seqKey, "NX", seqVal, seqField)
+
+if rspSeq ~= 1
+then
+  return {-1, 0}
+end
+
+local rspIncr1 = redis.call('ZINCRBY', incrKey, incrVal, incrField)
+local rspIncr2 = redis.call('ZINCRBY', incrKey2, incrVal, incrField)
+return {rspIncr1, rspIncr2}
+`
+
+// luaScriptHSetSeqAndVal 用hset记录积分和订单
+var luaScriptHSetSeqAndVal = `
+local key = KEYS[1]
+local seqField = ARGV[1]
+local seqVal = ARGV[2]
+local incrField = ARGV[3]
+local incrVal = tonumber(ARGV[4])
+local incrField2 = ARGV[5]
+local incrVal2 = tonumber(ARGV[6])
+
+local rspSeq = redis.call('HSET', key, seqField, seqVal)
+
+if rspSeq ~= 1
+then
+  return {-1, 0}
+end
+
+local rspIncr = redis.call('HINCRBY', key, incrField, incrVal)
+local rspIncr2 = redis.call('HINCRBY', key, incrField2, incrVal2)
+return {rspIncr, rspIncr2}
+`

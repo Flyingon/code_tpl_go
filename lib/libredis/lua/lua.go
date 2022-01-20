@@ -33,3 +33,6 @@ func init() {
 	CheckAndZAdd = redigo.NewScript(2, LuaScriptCheckAndZadd)
 	HIncrAndZAdd = redigo.NewScript(2, LuaScriptHIncrAndZAdd)
 }
+
+var SeqSetAndZIncr = redigo.NewScript(3, luaScriptSeqSetAndZIncr)
+var HSetSeqAndVal = redigo.NewScript(1, luaScriptHSetSeqAndVal)
