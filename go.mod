@@ -37,10 +37,10 @@ require (
 	github.com/siddontang/go-mysql v0.0.0-00010101000000-000000000000
 	github.com/stretchr/testify v1.7.0
 	github.com/tencentyun/cos-go-sdk-v5 v0.7.25
-	github.com/valyala/fasthttp v1.27.0
+	github.com/valyala/fasthttp v1.34.0
 	github.com/xdg/scram v1.0.3
 	go.uber.org/automaxprocs v1.4.0
-	golang.org/x/net v0.0.0-20210510120150-4163338589ed
+	golang.org/x/net v0.0.0-20220225172249-27dd8689420f
 	golang.org/x/time v0.0.0-20210220033141-f8bda1e9f3ba
 	google.golang.org/protobuf v1.26.0
 	gopkg.in/olivere/elastic.v6 v6.2.35
