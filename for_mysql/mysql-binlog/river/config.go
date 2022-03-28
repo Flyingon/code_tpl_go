@@ -20,9 +20,9 @@ type Config struct {
 	MyPassword string `toml:"my_pass"`
 	MyCharset  string `toml:"my_charset"`
 
-	ServerID uint32 `toml:"server_id"`
-	Flavor   string `toml:"flavor"`
-	DataDir  string `toml:"data_dir"`
+	ServerID  uint32 `toml:"server_id"`
+	Flavor    string `toml:"flavor"`
+	tuDataDir string `toml:"data_dir"`
 
 	DumpExec       string `toml:"mysqldump"`
 	SkipMasterData bool   `toml:"skip_master_data"`

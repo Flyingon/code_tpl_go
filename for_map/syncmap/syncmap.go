@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
+	jsoniter "github.com/json-iterator/go"
 	"sync"
 )
-
 
 type MySyncMap struct {
 	sync.Map
@@ -17,6 +17,11 @@ func (m MySyncMap) Print(k interface{}) {
 	valueStr, ok := value.(string)
 	fmt.Printf("value str ptr: %p\n", &valueStr)
 	fmt.Println("value str: ", valueStr, ok)
+}
+
+func (m MySyncMap) PrintJson() {
+	mapJson, err := jsoniter.MarshalToString(&m)
+	fmt.Printf("[JSON] %s, err: %v", mapJson, err)
 }
 
 func main() {
@@ -43,4 +48,6 @@ func main() {
 		return true
 	})
 	fmt.Printf("ret: %+v\n", ret)
+
+	syncMap.PrintJson()
 }
