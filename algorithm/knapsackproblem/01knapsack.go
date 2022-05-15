@@ -6,6 +6,7 @@ import (
 )
 
 // Knapsack01Solved 01背包问题基本解法
+// 时间复杂度: O(len(weightList) * bagWeight)
 func Knapsack01Solved(weightList, valueList []int, bagWeight int) int {
 	//var dp [len(weightList)][bagWeight]int
 	dp := make([][]int, len(weightList))
@@ -13,7 +14,7 @@ func Knapsack01Solved(weightList, valueList []int, bagWeight int) int {
 		dp[i] = make([]int, bagWeight+1)
 		if i == 0 {
 			for j := range dp[i] {
-				if weightList[i] <=j {
+				if weightList[i] <= j {
 					dp[i][j] = valueList[i]
 				}
 			}
