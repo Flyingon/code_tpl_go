@@ -1,6 +1,7 @@
 package internal
 
 import (
+	"fmt"
 	"math/rand"
 	"time"
 )
@@ -44,7 +45,7 @@ func GenOrderBinTreeRandom(rootData, times, randRange int) *Node {
 	root := NewNode(rootData)
 	for i := 0; i < times; i++ {
 		n := getRandomInt(1, randRange)
-		//fmt.Println("i=", i, "的随机数是", n)
+		fmt.Println("i=", i, "的随机数是", n)
 		root.Insert(NewNode(n))
 	}
 	return root

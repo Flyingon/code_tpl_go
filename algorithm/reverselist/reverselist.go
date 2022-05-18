@@ -1,21 +1,14 @@
 package main
 
-import "fmt"
+import (
+	"code_tpl_go/algorithm/reverselist/internal"
+)
 
-/**
- * Definition for singly-linked list.
- */
-
-type ListNode struct {
-	Val  int
-	Next *ListNode
-}
-
-func reverseList(head *ListNode) *ListNode {
+func reverseList(head *internal.ListNode) *internal.ListNode {
 	if head == nil || head.Next == nil {
 		return head
 	}
-	var prev *ListNode
+	var prev *internal.ListNode
 	cur := head
 	for cur != nil {
 		next := cur.Next
@@ -26,7 +19,7 @@ func reverseList(head *ListNode) *ListNode {
 	return prev
 }
 
-func reverseListV2(head *ListNode) *ListNode {
+func reverseListV2(head *internal.ListNode) *internal.ListNode {
 	if head == nil || head.Next == nil {
 		return head
 	}
@@ -42,31 +35,9 @@ func reverseListV2(head *ListNode) *ListNode {
 	return prev
 }
 
-func printList(head *ListNode) {
-	var intList []int
-	pPos := head
-	for pPos.Next != nil {
-		intList = append(intList, pPos.Val)
-		pPos = pPos.Next
-	}
-	fmt.Println(intList)
-}
-
 func main() {
-	head := &ListNode{
-		Val:  0,
-		Next: nil,
-	}
-	pPos := head
-	for i := 1; i < 10; i++ {
-		new := &ListNode{
-			Val:  i,
-			Next: nil,
-		}
-		pPos.Next = new
-		pPos = new
-	}
-	printList(head)
-	newHead := reverseList(head)
-	printList(newHead)
+	head := internal.GenNodeListByIncr(10)
+	head.Print()
+	newHead := reverseListV2(head)
+	newHead.Print()
 }

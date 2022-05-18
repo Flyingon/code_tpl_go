@@ -1,8 +1,8 @@
 package deque
 
 import (
-	"code_tpl_go/util"
 	"context"
+	"github.com/Flyingon/go-common/util"
 	"github.com/siddontang/go-log/log"
 	"sync"
 	"time"
