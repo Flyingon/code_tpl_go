@@ -1,8 +1,8 @@
 package main
 
 import (
-	"code_tpl_go/util"
 	"fmt"
+	"github.com/Flyingon/go-common/util"
 	"strconv"
 	"time"
 )
