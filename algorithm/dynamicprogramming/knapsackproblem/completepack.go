@@ -1,7 +1,7 @@
 package main
 
 import (
-	"code_tpl_go/algorithm/knapsackproblem/internal"
+	"code_tpl_go/algorithm/dynamicprogramming/knapsackproblem/internal"
 )
 
 /*

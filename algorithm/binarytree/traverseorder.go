@@ -15,17 +15,17 @@ import (
 
 func preorderTraversal(root *internal.TreeNode) []interface{} {
 	var res []interface{}
-	_perTraversal(root, &res)
+	_preTraversal(root, &res)
 	return res
 }
 
-func _perTraversal(root *internal.TreeNode, res *[]interface{}) {
+func _preTraversal(root *internal.TreeNode, res *[]interface{}) {
 	if root == nil {
 		return
 	}
 	*res = append(*res, root.Data)
-	_perTraversal(root.Left, res)
-	_perTraversal(root.Right, res)
+	_preTraversal(root.Left, res)
+	_preTraversal(root.Right, res)
 	return
 }
 
