@@ -15,6 +15,7 @@ require (
 	github.com/astaxie/beego v1.12.3
 	github.com/bsm/sarama-cluster v2.1.15+incompatible
 	github.com/buger/jsonparser v1.1.1
+	github.com/davecgh/go-spew v1.1.1
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
 	github.com/go-mysql-org/go-mysql v1.2.0 // indirect
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
@@ -26,6 +27,7 @@ require (
 	github.com/googollee/go-socket.io v1.6.0
 	github.com/gorilla/websocket v1.4.2
 	github.com/json-iterator/go v1.1.11
+	github.com/kcorlidy/dangerous v0.0.0-20200211105345-70577de0e5c4
 	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/mitchellh/mapstructure v1.4.1
 	github.com/olivere/elastic v6.2.35+incompatible // indirect
@@ -45,5 +47,6 @@ require (
 	golang.org/x/time v0.0.0-20210220033141-f8bda1e9f3ba
 	google.golang.org/protobuf v1.26.0
 	gopkg.in/olivere/elastic.v6 v6.2.35
+	gopkg.in/yaml.v2 v2.2.8
 	honnef.co/go/tools v0.0.1-2020.1.4 // indirect
 )
