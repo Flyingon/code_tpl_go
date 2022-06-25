@@ -23,7 +23,9 @@ func main() {
 	secretKey := "CHANGE_ME_TO_A_COMPLEX_RANDOM_SECRET"
 	salt := "cookie-session"
 	data, err := decodeFlaskCookie(secretKey, salt,
-		".eJwlz0FqAzEMheG7eD0LSZYsKZcZbI9EQ0IDM8mq9O41dP8-eP9P2fOM66vc3ucntrLfj3IrJmipHjDZjQaLJcLRq0Gi80QS6FgDhxOqmYS7Z28eEsMAhqp2TrURySBM0iZQjgrKPKeLd2ZgwdpSvFbv08wU4wDpk0XLVuZ15v5-PeJ7_QEm6qDVI0N9rbBRw0TuB44WdIhFAuJyz9fsz1hmwa18rjj_k6j8_gH2mEDE.YqgmMg.6zaZu8oS3PoaBCjppn4CATsO4uA")
+		".eJw1j0FqAzEMAP_icwqSLa2lfCbIskRL06RsNqfQv9dQ-oAZZl7lkns83sv52J9xKpePWc5FGCW7Bjip1EEsiTCtCSQqOVYGwxY4tGIX4VDVtE2DYwjA6L0bZZcRScBUeXOoORp0IndlNSIgxrYla2tqLiIdYwKbE_eyQr5j_7Jb3I7_NH_seTnun3FbhSYSjqJO3fqIpsvcmNHnEM9KadE521ym693tGotZ4Kk8H7H_TeIbOFeZ6MEIojybbOZBrYoSrcHy8wtBWVCW.YrRLsQ.LYHpqFJhHjshqGPOByTnseUDAXg",
+		//".eJwlz0FqAzEMheG7eD0LSZYsKZcZbI9EQ0IDM8mq9O41dP8-eP9P2fOM66vc3ucntrLfj3IrJmipHjDZjQaLJcLRq0Gi80QS6FgDhxOqmYS7Z28eEsMAhqp2TrURySBM0iZQjgrKPKeLd2ZgwdpSvFbv08wU4wDpk0XLVuZ15v5-PeJ7_QEm6qDVI0N9rbBRw0TuB44WdIhFAuJyz9fsz1hmwa18rjj_k6j8_gH2mEDE.YqgmMg.6zaZu8oS3PoaBCjppn4CATsO4uA",
+	)
 	fmt.Println(data, err)
 
 	enCodeData, err := encodeFlaskCookie(secretKey, salt, map[string]interface{}{

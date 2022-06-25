@@ -1,7 +1,7 @@
 package main
 
 import (
-	"./workerpool"
+	"code_tpl_go/for_workerpool/for_workerpool_goneat/workerpool"
 	"fmt"
 	"time"
 )

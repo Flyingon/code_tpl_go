@@ -1,7 +1,8 @@
 package main
 
-import ("../util"
+import (
 	"fmt"
+	"github.com/Flyingon/go-common/util"
 )
 
 func MapCopyExample() {
@@ -15,7 +16,6 @@ func MapCopyExample() {
 	map3 := util.MapCopy(nil)
 	fmt.Println("map3: ", map3)
 }
-
 
 func main() {
 	MapCopyExample()
