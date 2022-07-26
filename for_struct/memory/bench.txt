@@ -1,0 +1,17 @@
+goos: darwin
+goarch: arm64
+pkg: code_tpl_go/for_struct/memory
+BenchmarkSetWithBoolValueWrite
+BenchmarkSetWithBoolValueWrite      	       1	12032437167 ns/op	3550425848 B/op	 2452540 allocs/op
+BenchmarkSetWithBoolValueWrite      	       1	10907187084 ns/op	3550666328 B/op	 2455054 allocs/op
+BenchmarkSetWithBoolValueWrite      	       1	11057296041 ns/op	3550489720 B/op	 2453632 allocs/op
+BenchmarkSetWithStructValueWrite
+BenchmarkSetWithStructValueWrite    	       1	10438628917 ns/op	3228391272 B/op	 2455090 allocs/op
+BenchmarkSetWithStructValueWrite    	       1	10355275625 ns/op	3226057928 B/op	 2454002 allocs/op
+BenchmarkSetWithStructValueWrite    	       1	11545021000 ns/op	3226152968 B/op	 2454679 allocs/op
+BenchmarkSetWithInterfaceValueWrite
+BenchmarkSetWithInterfaceValueWrite 	       1	83493538708 ns/op	7926102488 B/op	 2454619 allocs/op
+BenchmarkSetWithInterfaceValueWrite 	       1	74677888708 ns/op	7926861064 B/op	 2458266 allocs/op
+BenchmarkSetWithInterfaceValueWrite 	       1	69731123375 ns/op	7926910360 B/op	 2458503 allocs/op
+PASS
+ok  	code_tpl_go/for_struct/memory	294.977s

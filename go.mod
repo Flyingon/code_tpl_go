@@ -18,7 +18,9 @@ require (
 	github.com/davecgh/go-spew v1.1.1
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
 	github.com/go-mysql-org/go-mysql v1.2.0 // indirect
+	github.com/go-ozzo/ozzo-routing v2.1.4+incompatible // indirect
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
+	github.com/golang/gddo v0.0.0-20210115222349-20d68f94ee1f // indirect
 	github.com/golang/mock v1.5.0
 	github.com/golang/protobuf v1.5.2
 	github.com/gomodule/redigo v2.0.0+incompatible
@@ -32,6 +34,7 @@ require (
 	github.com/mitchellh/mapstructure v1.4.1
 	github.com/olivere/elastic v6.2.35+incompatible // indirect
 	github.com/pkg/errors v0.9.1
+	github.com/qiangxue/fasthttp-routing v0.0.0-20160225050629-6ccdc2a18d87
 	github.com/robfig/cron v1.2.0
 	github.com/satori/go.uuid v1.2.0
 	github.com/shopspring/decimal v1.2.0
