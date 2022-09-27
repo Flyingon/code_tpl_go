@@ -2,25 +2,35 @@ package main
 
 import (
 	"fmt"
-	"github.com/robfig/cron"
 	"time"
+
+	"github.com/robfig/cron/v3"
 )
 
 var timeLayout = "2006-01-02_15:04:05"
 
-func main() {
-	//cronSpec := "0 */1 * * * *"
-	cronSpec := "*/5 * * * * *"
-	sch, _ := cron.Parse(cronSpec)
-	fmt.Println(time.Now())
-	fmt.Println(sch.Next(time.Now()))
+// getCronNextTimeShow 查询cron下次执行时间
+func getCronNextTimeShow(cronSpec string) (string, error) {
+	nextTime, err := getCronNextTime(cronSpec)
+	if err != nil {
+		return "", err
+	}
+	return nextTime.Format(timeLayout), nil
+}
 
-	ct := cron.New()
-	_ = ct.AddFunc(cronSpec, func() {
-		fmt.Print("now: ", time.Now().Format(timeLayout))
-		fmt.Printf("\nc.Entries()[0].Prev:%s\nc.Entries()[0].Next:%s",
-			ct.Entries()[0].Prev.Format(timeLayout), ct.Entries()[0].Next.Format(timeLayout))
-	})
-	ct.Start()
-	<-time.After(1000 * time.Second)
+// getCronNextTime 查询cron下次执行时间
+func getCronNextTime(cronSpec string) (time.Time, error) {
+	tz := "Asia/Hong_Kong"
+	loc, _ := time.LoadLocation(tz)
+	sch, err := cron.ParseStandard(cronSpec)
+
+	if err != nil {
+		return time.Time{}, err
+	}
+	return sch.Next(time.Now().In(loc)), nil
+}
+
+func main() {
+	t, err := getCronNextTime("1 0,8 * * *")
+	fmt.Println(t.Unix(), err)
 }
