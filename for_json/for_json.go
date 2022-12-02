@@ -8,7 +8,18 @@ import (
 	"strings"
 )
 
+type ABC struct {
+	A string `json:"a"`
+	B int    `json:"b"`
+}
 
+type DEF struct {
+}
+
+type JJJ struct {
+	ABC `json:"abc"`
+	DEF json.RawMessage `json:"def"`
+}
 
 func main2() {
 	dataJson := `{"a": "123", "b": 11111111111111111111111}`
@@ -26,8 +37,15 @@ func main2() {
 }
 
 func main() {
-	var params []interface{}
-	dataJson := `["user:info:100422","total_credits",4653000]`
-	jsoniter.Unmarshal([]byte(dataJson), &params)
-	fmt.Println(params)
+	dataJson := `{
+	   "abc": {
+			"a": "1",
+			"b": 3
+		},
+		"def": "xxadkajxk"
+	}`
+	jjj := JJJ{}
+	err := json.Unmarshal([]byte(dataJson), &jjj)
+	fmt.Println(err)
+	fmt.Printf("%s", jjj.DEF)
 }

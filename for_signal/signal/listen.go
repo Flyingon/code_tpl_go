@@ -11,7 +11,7 @@ func listenSignal(signals <-chan os.Signal) {
 		select {
 		case d := <-signals:
 			fmt.Printf("get signal: %+v\n", d.String())
-			fmt.Printf("!!!!!!!!!!")
+			fmt.Printf("!!!!!!!!!!\n")
 		}
 	}
 }
