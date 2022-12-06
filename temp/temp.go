@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math"
 	"strconv"
 	"strings"
 )
@@ -19,5 +20,7 @@ func ip2addr(ipStr string) {
 }
 
 func main() {
-	ip2addr("192.168.0.1")
+	//ip2addr("192.168.0.1")
+	fmt.Println(math.MaxInt32 / 86400)
+	fmt.Println()
 }
