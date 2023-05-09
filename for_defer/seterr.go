@@ -10,7 +10,7 @@ func deferSetErrV1() error {
 	defer func() {
 		err = errors.New("test")
 	}()
-	return nil
+	return err
 }
 
 func deferSetErrV2() (err error) {
