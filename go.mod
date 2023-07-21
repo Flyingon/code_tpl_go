@@ -11,6 +11,7 @@ require (
 	cloud.google.com/go/pubsub v1.28.0
 	github.com/BurntSushi/toml v1.2.0
 	github.com/Flyingon/go-common v0.1.12
+	github.com/JamesStewy/go-mysqldump v0.2.2
 	github.com/Knetic/govaluate v3.0.0+incompatible
 	github.com/Shopify/sarama v1.36.0
 	github.com/armon/go-socks5 v0.0.0-20160902184237-e75332964ef5
@@ -25,6 +26,7 @@ require (
 	github.com/gin-gonic/gin v1.8.1
 	github.com/go-oauth2/oauth2/v4 v4.5.2
 	github.com/go-rod/rod v0.113.3
+	github.com/go-sql-driver/mysql v1.5.0
 	github.com/golang/mock v1.6.0
 	github.com/golang/protobuf v1.5.3
 	github.com/gomodule/redigo v2.0.0+incompatible
@@ -62,6 +64,7 @@ require (
 	cloud.google.com/go/iam v0.12.0 // indirect
 	github.com/AdaLogics/go-fuzz-headers v0.0.0-20230106234847-43070de90fa1 // indirect
 	github.com/AdamKorcz/go-118-fuzz-build v0.0.0-20221215162035-5330a85ea652 // indirect
+	github.com/DATA-DOG/go-sqlmock v1.5.0 // indirect
 	github.com/Microsoft/go-winio v0.6.1 // indirect
 	github.com/Microsoft/hcsshim v0.10.0-rc.8 // indirect
 	github.com/andreburgaud/crypt2go v0.13.0 // indirect
