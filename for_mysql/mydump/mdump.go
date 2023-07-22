@@ -1,17 +1,21 @@
 package main
 
 import (
+	"database/sql"
 	"errors"
 	"fmt"
-	"io/ioutil"
-	"os"
-	"strings"
-
-	"database/sql"
+	"github.com/blastrain/vitess-sqlparser/sqlparser"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/hpcloud/tail"
 	jsoniter "github.com/json-iterator/go"
 	"gopkg.in/yaml.v3"
+	"os"
+	"strconv"
+	"strings"
+	"time"
 )
+
+var process = Process{}
 
 type Config struct {
 	Mysql  MysqlCfg  `yaml:"mysql"`
@@ -26,7 +30,10 @@ type MysqlCfg struct {
 }
 
 type ExportCfg struct {
-	OnceNumber int64 `yaml:"oncenumber"`
+	DBName     string `yaml:"db_name"`
+	OnceNumber int64  `yaml:"oncenumber"`
+	FileSep    string `yaml:"file_sep"`
+	LineSep    string `yaml:"line_sep"`
 }
 
 var cfg = Config{}
@@ -34,17 +41,22 @@ var cfg = Config{}
 const (
 	configFile   = "./config.yaml"
 	tableFileTml = "./%s_tables.json"
-	dataDirTml   = "./%s_dir"
+	dataDirTml   = "./%s"
+	processFile  = "./process.json"
 )
 
+type Process struct {
+	TableIndex int `json:"table_index"`
+}
+
 type TableInfo struct {
-	//Name  string `json:"-"`
-	MinID int64 `json:"min_id"`
-	MaxID int64 `json:"max_id"`
+	Name  string `json:"name"`
+	MinID int64  `json:"min_id"`
+	MaxID int64  `json:"max_id"`
 }
 
 func loadCfg() error {
-	data, err := ioutil.ReadFile(configFile)
+	data, err := os.ReadFile(configFile)
 	if err != nil {
 		return err
 	}
@@ -97,46 +109,45 @@ func getMinMaxIds(db *sql.DB, tableName string) (int64, int64, error) {
 	return minID, maxID, nil
 }
 
-func reloadTables(db *sql.DB, dbname string) (map[string]TableInfo, error) {
+func reloadTables(db *sql.DB, dbname string) ([]TableInfo, error) {
 	tables, err := getTables(db)
 	if err != nil {
-		return nil, fmt.Errorf("getTables, err: ", err)
+		return nil, fmt.Errorf("getTables, err: %s", err)
 	}
 	//fmt.Println(tables)
 
-	tableInfos := make(map[string]TableInfo)
+	tableInfos := make([]TableInfo, 0, len(tables))
 	tableFile := fmt.Sprintf(tableFileTml, dbname)
-	if exist, _ := exists(tableFile); exist {
-		data, e := ioutil.ReadFile(tableFile)
+	if Exists(tableFile) {
+		data, e := os.ReadFile(tableFile)
 		if e != nil {
-			return nil, fmt.Errorf("open table file failed: ", e)
+			return nil, fmt.Errorf("open table file failed: %s", e)
 		}
 		e = jsoniter.Unmarshal(data, &tableInfos)
 		if e != nil {
-			return nil, fmt.Errorf(" parse table file failed: ", e)
+			return nil, fmt.Errorf(" parse table file failed: %s", e)
 		}
 		return tableInfos, nil
 	}
 
-	f, err := os.OpenFile(tableFile, os.O_CREATE|os.O_WRONLY, 0644)
-	if err != nil {
-		return nil, fmt.Errorf("open table file failed:  ", err)
-	}
-	defer f.Close()
-
 	for _, tableName := range tables {
+		if tableName == "" {
+			continue
+		}
+
 		minID, maxID, e := getMinMaxIds(db, tableName)
 		if e != nil {
 			fmt.Printf("[WARN] getMinMaxIds failed: %s, table: %s\n", e.Error(), tableName)
 			continue
 		}
-		tableInfos[tableName] = TableInfo{
+		tableInfos = append(tableInfos, TableInfo{
+			Name:  tableName,
 			MinID: minID,
 			MaxID: maxID,
-		}
+		})
 	}
-	tableInfosJson, _ := jsoniter.MarshalToString(tableInfos)
-	_, err = f.WriteString(tableInfosJson)
+	tableInfosJson, _ := jsoniter.Marshal(tableInfos)
+	err = writeToFile(tableFile, tableInfosJson)
 	if err != nil {
 		return nil, fmt.Errorf("write to table file failed: %s", err.Error())
 	}
@@ -144,26 +155,20 @@ func reloadTables(db *sql.DB, dbname string) (map[string]TableInfo, error) {
 	return tableInfos, nil
 }
 
-func doDump() error {
-	err := loadCfg()
+func doDump() (err error) {
+	err = loadCfg()
 	if err != nil {
 		return err
 	}
 
-	if len(os.Args) < 2 {
-		return errors.New("args is not enough")
-	}
-	dbname := os.Args[1]
-
-	fmt.Println(cfg, dbname)
-
+	dbname := cfg.Export.DBName
 	db, err := sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s:%s)/%s",
 		cfg.Mysql.User,
 		cfg.Mysql.Password,
 		cfg.Mysql.Host,
 		cfg.Mysql.Port, dbname))
 	if err != nil {
-		return fmt.Errorf("opening.database: ", err)
+		return fmt.Errorf("opening.database: %v", err)
 	}
 	defer db.Close()
 
@@ -172,12 +177,51 @@ func doDump() error {
 		return err
 	}
 	//fmt.Println("tableInfos: ", tableInfos)
-	for tableName, info := range tableInfos {
-		e := dumpOneTable(db, tableName, info)
+
+	if Exists(processFile) {
+		data, e := os.ReadFile(processFile)
 		if e != nil {
-			return e
+			return fmt.Errorf("read process file failed: %s", e.Error())
 		}
-		break
+		e = jsoniter.Unmarshal(data, &process)
+		if e != nil {
+			return fmt.Errorf("parse process file failed: %s", e.Error())
+		}
+	}
+	defer func() {
+		processJson, e := jsoniter.Marshal(&process)
+		if e != nil {
+			err = fmt.Errorf("marshal process file failed: %s", e.Error())
+			return
+		}
+		e = writeToFile(processFile, processJson)
+		if e != nil {
+			err = fmt.Errorf("write to process file failed: %s", e.Error())
+			return
+		}
+	}()
+
+	for index, info := range tableInfos {
+		if index < process.TableIndex {
+			continue
+		}
+		process.TableIndex = index // 更新 index
+		processJson, e := jsoniter.Marshal(&process)
+		if e != nil {
+			err = fmt.Errorf("marshal process file failed: %s", e.Error())
+			return
+		}
+		e = writeToFile(processFile, processJson)
+		if e != nil {
+			err = fmt.Errorf("write to process file failed: %s", e.Error())
+			return
+		}
+
+		exportErr := dumpOneTable(db, info)
+		if exportErr != nil {
+			return exportErr
+		}
+		//break
 	}
 	return nil
 }
@@ -191,20 +235,66 @@ func main() {
 	fmt.Println("[INFO] dump success")
 }
 
-func dumpOneTable(db *sql.DB, tableName string, tableInfo TableInfo) error {
-	createSql, err := createTableSQL(db, tableName)
+func dumpOneTable(db *sql.DB, tableInfo TableInfo) error {
+	dirPath := fmt.Sprintf(dataDirTml, tableInfo.Name)
+	if !Exists(dirPath) {
+		err := os.Mkdir(dirPath, os.ModePerm)
+		if err != nil {
+			return err
+		}
+	}
+
+	createSql, err := createTableSQL(db, tableInfo.Name)
 	if err != nil {
 		return err
 	}
-	fmt.Println(createSql)
+	//fmt.Println(createSql)
+	createSqlFile := fmt.Sprintf("%s/create.sql", dirPath)
+	err = writeToFile(createSqlFile, []byte(createSql))
+	if err != nil {
+		return err
+	}
 
+	dataFile := fmt.Sprintf("%s/data.csv", dirPath) // 数据文件存储
 	pos := tableInfo.MinID
-
-	values, err := createTableValues(db, tableName, pos, pos+cfg.Export.OnceNumber)
-	if err != nil {
-		return err
+	if !Exists(dataFile) { // 第一次，存储表头
+		stmt, err := sqlparser.Parse(createSql)
+		if err != nil {
+			return err
+		}
+		createTableStruct, _ := stmt.(*sqlparser.CreateTable)
+		columnNames := make([]string, len(createTableStruct.Columns))
+		for index, col := range createTableStruct.Columns {
+			columnNames[index] = col.Name
+		}
+		err = writeToFile(dataFile, []byte(strings.Join(columnNames, ",")+cfg.Export.LineSep))
+		if err != nil {
+			return err
+		}
+	} else {
+		pos, err = GetPosID(dataFile)
+		if err != nil {
+			return err
+		}
+		pos = pos + 1 // 当前这条数据已经有了
 	}
-	fmt.Println("VALUES: ", values)
+
+	fmt.Printf("begin export table %s, from: %d\n", tableInfo.Name, pos)
+	for pos < tableInfo.MaxID {
+		start_ts := time.Now()
+		value, e := createTableValues(db, tableInfo.Name, pos, pos+cfg.Export.OnceNumber, cfg.Export.FileSep)
+		if e != nil {
+			return e
+		}
+		//fmt.Println("VALUES: ", values)
+		err = appendToFile(dataFile, []byte(value+cfg.Export.LineSep))
+		if err != nil {
+			return err
+		}
+		cost := time.Since(start_ts).Seconds()
+		fmt.Printf("%0.5f, cost: %0.2f s\n", float32(pos)/float32(tableInfo.MaxID), cost)
+		pos = pos + cfg.Export.OnceNumber
+	}
 
 	return nil
 }
@@ -225,7 +315,7 @@ func createTableSQL(db *sql.DB, name string) (string, error) {
 	return table_sql.String, nil
 }
 
-func createTableValues(db *sql.DB, name string, minID, maxID int64) (string, error) {
+func createTableValues(db *sql.DB, name string, minID, maxID int64, sep string) (string, error) {
 	// Get Data
 	rows, err := db.Query(fmt.Sprintf("SELECT * FROM %s WHERE id >= %d AND id < %d", name, minID, maxID))
 	if err != nil {
@@ -243,13 +333,8 @@ func createTableValues(db *sql.DB, name string, minID, maxID int64) (string, err
 	}
 
 	// Read data
-	data_text := make([]string, 0)
+	dataText := make([]string, 0)
 	for rows.Next() {
-		// Init temp data storage
-
-		//ptrs := make([]interface{}, len(columns))
-		//var ptrs []interface {} = make([]*sql.NullString, len(columns))
-
 		data := make([]*sql.NullString, len(columns))
 		ptrs := make([]interface{}, len(columns))
 		for i, _ := range data {
@@ -265,25 +350,61 @@ func createTableValues(db *sql.DB, name string, minID, maxID int64) (string, err
 
 		for key, value := range data {
 			if value != nil && value.Valid {
-				dataStrings[key] = value.String
+				dataStrings[key], _ = jsoniter.MarshalToString(value.String)
 			}
 		}
+		dataText = append(dataText, strings.Join(dataStrings, sep))
 
-		data_text = append(data_text, "('"+strings.Join(dataStrings, "','")+"')")
 	}
-
-	return strings.Join(data_text, ","), rows.Err()
+	return strings.Join(dataText, cfg.Export.LineSep), rows.Err()
 }
 
-func exists(p string) (bool, os.FileInfo) {
-	f, err := os.Open(p)
+func Exists(path string) bool {
+	_, err := os.Stat(path) //os.Stat获取文件信息
 	if err != nil {
-		return false, nil
+		if os.IsExist(err) {
+			return true
+		}
+		return false
+	}
+	return true
+}
+
+func writeToFile(path string, data []byte) error {
+	f, err := os.OpenFile(path, os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		return err
 	}
 	defer f.Close()
-	fi, err := f.Stat()
+	_, err = f.Write(data)
+	return err
+}
+
+func appendToFile(path string, data []byte) error {
+	f, err := os.OpenFile(path, os.O_CREATE|os.O_APPEND, 0644)
 	if err != nil {
-		return false, nil
+		return err
 	}
-	return true, fi
+	defer f.Close()
+	_, err = f.Write(data)
+	return err
+}
+
+func GetPosID(filePath string) (id int64, err error) {
+	t, err := tail.TailFile(filePath, tail.Config{Follow: false})
+	var lastLine = ""
+	for line := range t.Lines {
+		lastLine = line.Text
+	}
+	var maxIDStr string
+	err = jsoniter.UnmarshalFromString(strings.Split(lastLine, cfg.Export.FileSep)[0], &maxIDStr)
+	if err != nil {
+		return 0, err
+	}
+	maxID, err := strconv.ParseInt(maxIDStr, 10, 64)
+	if err != nil {
+		return 0, err
+	}
+	//fmt.Println("AAAA ", maxIDStr, maxID)
+	return maxID, nil
 }
