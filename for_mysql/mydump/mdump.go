@@ -2,17 +2,19 @@ package main
 
 import (
 	"database/sql"
+	"encoding/csv"
 	"errors"
 	"fmt"
+	"os"
+	"strconv"
+	"strings"
+	"time"
+
 	"github.com/blastrain/vitess-sqlparser/sqlparser"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/hpcloud/tail"
 	jsoniter "github.com/json-iterator/go"
 	"gopkg.in/yaml.v3"
-	"os"
-	"strconv"
-	"strings"
-	"time"
 )
 
 var process = Process{}
@@ -34,6 +36,7 @@ type ExportCfg struct {
 	OnceNumber int64  `yaml:"oncenumber"`
 	FileSep    string `yaml:"file_sep"`
 	LineSep    string `yaml:"line_sep"`
+	Debug      bool   `yaml:"debug"`
 }
 
 var cfg = Config{}
@@ -281,19 +284,42 @@ func dumpOneTable(db *sql.DB, tableInfo TableInfo) error {
 
 	fmt.Printf("begin export table %s, from: %d\n", tableInfo.Name, pos)
 	for pos < tableInfo.MaxID {
-		start_ts := time.Now()
-		value, e := createTableValues(db, tableInfo.Name, pos, pos+cfg.Export.OnceNumber, cfg.Export.FileSep)
+		e := func() error {
+			startTs := time.Now()
+			values, e := createTableValues(db, tableInfo.Name, pos, pos+cfg.Export.OnceNumber, cfg.Export.FileSep)
+			if e != nil {
+				return e
+			}
+			valLen := len(values)
+
+			defer func() {
+				cost := time.Since(startTs).Seconds()
+
+				fmt.Printf("%0.5f (%d/%d), cost: %0.2f s, len: %d\n",
+					(float32(pos-tableInfo.MinID))/(float32(tableInfo.MaxID-tableInfo.MinID)),
+					pos-tableInfo.MinID,
+					tableInfo.MaxID-tableInfo.MinID,
+					cost, valLen)
+				pos = pos + cfg.Export.OnceNumber
+			}()
+
+			//fmt.Println("VALUES: ", len(value))
+			if valLen == 0 { // 这个条件下没有数据可以导出
+				return nil
+			}
+
+			err = appendToFile(dataFile, []byte(formatValues(values)+cfg.Export.LineSep))
+			//err = writeToCsv(dataFile, values)
+			if err != nil {
+				return err
+			}
+			//fmt.Printf("%0.5f, cost: %0.2f s, len: %d\n", float32(pos)/float32(tableInfo.MaxID), cost, dataLen)
+			//pos = pos + cfg.Export.OnceNumber
+			return nil
+		}()
 		if e != nil {
 			return e
 		}
-		//fmt.Println("VALUES: ", values)
-		err = appendToFile(dataFile, []byte(value+cfg.Export.LineSep))
-		if err != nil {
-			return err
-		}
-		cost := time.Since(start_ts).Seconds()
-		fmt.Printf("%0.5f, cost: %0.2f s\n", float32(pos)/float32(tableInfo.MaxID), cost)
-		pos = pos + cfg.Export.OnceNumber
 	}
 
 	return nil
@@ -315,25 +341,30 @@ func createTableSQL(db *sql.DB, name string) (string, error) {
 	return table_sql.String, nil
 }
 
-func createTableValues(db *sql.DB, name string, minID, maxID int64, sep string) (string, error) {
+func createTableValues(db *sql.DB, name string, minID, maxID int64, sep string) ([][]string, error) {
 	// Get Data
-	rows, err := db.Query(fmt.Sprintf("SELECT * FROM %s WHERE id >= %d AND id < %d", name, minID, maxID))
+	querySQL := fmt.Sprintf("SELECT * FROM %s WHERE id >= %d AND id < %d", name, minID, maxID)
+
+	if cfg.Export.Debug {
+		fmt.Printf("[QUERYSQL] %s\n", querySQL)
+	}
+	rows, err := db.Query(querySQL)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 	defer rows.Close()
 
 	// Get columns
 	columns, err := rows.Columns()
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 	if len(columns) == 0 {
-		return "", errors.New("No columns in table " + name + ".")
+		return nil, errors.New("No columns in table " + name + ".")
 	}
 
 	// Read data
-	dataText := make([]string, 0)
+	dataText := make([][]string, 0)
 	for rows.Next() {
 		data := make([]*sql.NullString, len(columns))
 		ptrs := make([]interface{}, len(columns))
@@ -343,20 +374,31 @@ func createTableValues(db *sql.DB, name string, minID, maxID int64, sep string) 
 
 		// Read data
 		if err := rows.Scan(ptrs...); err != nil {
-			return "", err
+			return nil, err
 		}
 
 		dataStrings := make([]string, len(columns))
-
 		for key, value := range data {
 			if value != nil && value.Valid {
-				dataStrings[key], _ = jsoniter.MarshalToString(value.String)
+				dataStrings[key] = value.String
 			}
 		}
-		dataText = append(dataText, strings.Join(dataStrings, sep))
+		dataText = append(dataText, dataStrings)
+	}
+	return dataText, rows.Err()
+}
+
+func formatValues(values [][]string) string {
+	rowList := make([]string, len(values))
+	for indexRow, value := range values {
+		elems := make([]string, len(value))
+		for indexElem, elem := range value {
+			elems[indexElem], _ = jsoniter.MarshalToString(elem)
+		}
+		rowList[indexRow] = strings.Join(elems, cfg.Export.FileSep)
 
 	}
-	return strings.Join(dataText, cfg.Export.LineSep), rows.Err()
+	return strings.Join(rowList, cfg.Export.LineSep)
 }
 
 func Exists(path string) bool {
@@ -390,17 +432,40 @@ func appendToFile(path string, data []byte) error {
 	return err
 }
 
+func writeToCsv(path string, rowList [][]string) error {
+	f, err := os.OpenFile(path, os.O_CREATE|os.O_APPEND, 0644)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+
+	w := csv.NewWriter(f)
+	for _, row := range rowList {
+		if e := w.Write(row); e != nil {
+			return e
+		}
+	}
+	return nil
+}
+
 func GetPosID(filePath string) (id int64, err error) {
 	t, err := tail.TailFile(filePath, tail.Config{Follow: false})
 	var lastLine = ""
 	for line := range t.Lines {
-		lastLine = line.Text
+		if strings.Contains(line.Text, cfg.Export.FileSep) {
+			lastLine = line.Text
+		}
 	}
 	var maxIDStr string
 	err = jsoniter.UnmarshalFromString(strings.Split(lastLine, cfg.Export.FileSep)[0], &maxIDStr)
 	if err != nil {
 		return 0, err
 	}
+
+	if maxIDStr == "id" {
+		return 0, nil
+	}
+
 	maxID, err := strconv.ParseInt(maxIDStr, 10, 64)
 	if err != nil {
 		return 0, err
