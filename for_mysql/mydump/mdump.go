@@ -93,7 +93,6 @@ func getTables(db *sql.DB) ([]string, error) {
 }
 
 func getMinMaxIds(db *sql.DB, tableName string) (int64, int64, error) {
-
 	// Get table list
 	querySql := fmt.Sprintf("select min(id), max(id) from %s;", tableName)
 	rows, err := db.Query(querySql)
@@ -283,24 +282,29 @@ func dumpOneTable(db *sql.DB, tableInfo TableInfo) error {
 	}
 
 	fmt.Printf("begin export table %s, from: %d\n", tableInfo.Name, pos)
-	for pos < tableInfo.MaxID {
+	for pos <= tableInfo.MaxID {
 		e := func() error {
 			startTs := time.Now()
-			values, e := createTableValues(db, tableInfo.Name, pos, pos+cfg.Export.OnceNumber, cfg.Export.FileSep)
+			values, e := createTableValues(db, tableInfo.Name, pos, cfg.Export.OnceNumber)
 			if e != nil {
 				return e
 			}
 			valLen := len(values)
 
+			curMaxID, e := GetMaxIDFromValues(values)
+			if e != nil {
+				return e
+			}
+
 			defer func() {
 				cost := time.Since(startTs).Seconds()
 
 				fmt.Printf("%0.5f (%d/%d), cost: %0.2f s, len: %d\n",
-					(float32(pos-tableInfo.MinID))/(float32(tableInfo.MaxID-tableInfo.MinID)),
-					pos-tableInfo.MinID,
-					tableInfo.MaxID-tableInfo.MinID,
+					(float32(pos))/(float32(tableInfo.MaxID)),
+					pos,
+					tableInfo.MaxID,
 					cost, valLen)
-				pos = pos + cfg.Export.OnceNumber
+				pos = curMaxID
 			}()
 
 			//fmt.Println("VALUES: ", len(value))
@@ -313,13 +317,12 @@ func dumpOneTable(db *sql.DB, tableInfo TableInfo) error {
 			if err != nil {
 				return err
 			}
-			//fmt.Printf("%0.5f, cost: %0.2f s, len: %d\n", float32(pos)/float32(tableInfo.MaxID), cost, dataLen)
-			//pos = pos + cfg.Export.OnceNumber
 			return nil
 		}()
 		if e != nil {
 			return e
 		}
+		//break
 	}
 
 	return nil
@@ -341,9 +344,10 @@ func createTableSQL(db *sql.DB, name string) (string, error) {
 	return table_sql.String, nil
 }
 
-func createTableValues(db *sql.DB, name string, minID, maxID int64, sep string) ([][]string, error) {
+func createTableValues(db *sql.DB, name string, minID, onceNumber int64) ([][]string, error) {
 	// Get Data
-	querySQL := fmt.Sprintf("SELECT * FROM %s WHERE id >= %d AND id < %d", name, minID, maxID)
+	//querySQL := fmt.Sprintf("SELECT * FROM %s WHERE id >= %d AND id < %d", name, minID, maxID)
+	querySQL := fmt.Sprintf("SELECT * FROM %s WHERE id >= %d LIMIT %d", name, minID, onceNumber)
 
 	if cfg.Export.Debug {
 		fmt.Printf("[QUERYSQL] %s\n", querySQL)
@@ -471,5 +475,18 @@ func GetPosID(filePath string) (id int64, err error) {
 		return 0, err
 	}
 	//fmt.Println("AAAA ", maxIDStr, maxID)
+	return maxID, nil
+}
+
+func GetMaxIDFromValues(values [][]string) (maxID int64, err error) {
+	for _, row := range values {
+		curID, e := strconv.ParseInt(row[0], 10, 64)
+		if e != nil {
+			return 0, e
+		}
+		if curID > maxID {
+			maxID = curID
+		}
+	}
 	return maxID, nil
 }
