@@ -273,12 +273,12 @@ func dumpOneTable(db *sql.DB, tableInfo TableInfo) error {
 		if err != nil {
 			return err
 		}
-	} else {
+	} else { // 续传
 		pos, err = GetPosID(dataFile)
 		if err != nil {
 			return err
 		}
-		pos = pos + 1 // 当前这条数据已经有了
+		pos = pos + 1 // 表示改从这个位置开始导出了
 	}
 
 	fmt.Printf("begin export table %s, from: %d\n", tableInfo.Name, pos)
@@ -305,6 +305,9 @@ func dumpOneTable(db *sql.DB, tableInfo TableInfo) error {
 					tableInfo.MaxID,
 					cost, valLen)
 				pos = curMaxID
+				if pos == tableInfo.MaxID { // 最后一个，+1 退出循环
+					pos = pos + 1
+				}
 			}()
 
 			//fmt.Println("VALUES: ", len(value))
